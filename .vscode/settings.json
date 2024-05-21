@@ -1,0 +1,9 @@
+{
+  "conventionalCommits.scopes": [
+    "Frontend",
+    "Backend",
+    "Infrastructure",
+    "Documentation",
+    "Miscellaneous"
+  ]
+}
