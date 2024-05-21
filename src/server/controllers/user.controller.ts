@@ -6,7 +6,7 @@ class UserController {
   static async getAll(_: NextApiRequest, res: NextApiResponse) {
     try {
       const users = await prisma.user.findMany()
-      if (!users) return res.status(404).json({ error: 'No users found' })
+      if (!users) return res.status(204).json({ error: 'No users found' })
       return res.status(200).json(users)
     } catch (error) {
       return res.status(500).json({ error })
@@ -17,7 +17,7 @@ class UserController {
     try {
       const { id } = req.query
       const user = await prisma.user.findUnique({ where: { id: Number(id) } })
-      if (!user) return res.status(404).json({ error: 'User not found' })
+      if (!user) return res.status(204).json({ error: 'User not found' })
       return res.status(200).json(user)
     } catch (error) {
       return res.status(500).json({ error })
