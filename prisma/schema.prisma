@@ -27,6 +27,7 @@ model User {
   personal_id String?
   rating      Float?
   role        Role     @default(CUSTUMER)
+  key         String
   active      Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
