@@ -11,12 +11,14 @@
     "postinstall": "npx prisma generate"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
     "@prisma/client": "^5.14.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -15,16 +15,21 @@ datasource db {
 
 // Models
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String
-  password  String
-  name      String
-  surname   String
-  email     String   @unique
-  role      Role     @default(SUPPLIER)
-  active    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  username    String
+  password    String
+  name        String
+  surname     String
+  email       String   @unique
+  photo       String?
+  phone       String?
+  description String?
+  personal_id String?
+  rating      Float?
+  role        Role     @default(CUSTUMER)
+  active      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("users")
 }
