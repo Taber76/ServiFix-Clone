@@ -1,8 +1,10 @@
 import CustomersReview from "@/components/CustomersReview";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import Select from "@/components/ui/Select";
 import { ArrowRight, Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import ServiceCard from '@/components/ServiceCard'
 
 
 export default function Home() {
@@ -10,21 +12,13 @@ export default function Home() {
 
     <main className="bg-zinc-50 text-zinc-950">
       {/* Main */}
-      <section className=" w-full py-14 flex flex-col justify-center">
+      <section className=" w-full py-8 lg:py-14 flex flex-col justify-center">
         <MaxWidthWrapper>
           <div className="flex flex-col text-center justify-center items-center gap-7">
-            <div className=" flex flex-col gap-6">
-              <h1 className="text-7xl font-bold">Hire & Search Talents</h1>
+            <div className=" flex flex-col gap-6 items-center justify-center">
+              <h1 className="text-5xl lg:text-7xl font-bold">Hire & Search Talents</h1>
               <h3 className="text-xl ">Go ahead a find your new tasker</h3>
-              <form className="flex justify-center items-center border-2 p-2 w-min self-center rounded-2xl">
-                <input type="text" name="" id="" placeholder="Plumber, carpenter, electrician..." className="outline-none p-2" autoComplete="off" />
-                <button>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                  </svg>
-                </button>
-
-              </form>
+              <Select />
             </div>
 
             <Image src={'/main.jpg'} alt="Builders" width={1000} height={10} className="rounded-xl shadow-lg" />
@@ -35,12 +29,14 @@ export default function Home() {
       {/* Popular services */}
       <section className="w-full py-6 flex flex-col justify-center items-center bg-zinc-100">
         <MaxWidthWrapper>
-          <h2 className="text-5xl font-bold text-center">Popular Services</h2>
+          <h2 className="text-5xl font-bold text-center mb-16">Popular Services</h2>
           <div>
 
-            <Link href={'/services'} className="hover:underline transition-all">See more</Link>
-            <div className="grid ">
-              Coming soon... (services endpoint needed)
+            <div className="grid place-content-center">
+              <ServiceCard />
+            </div>
+            <div className="flex justify-end">
+              <Link href={'/services'} className=" transition-all hidden md:flex justify-end gap-2 p-2 mt-4">See all services <ArrowRight /> </Link>
             </div>
           </div>
         </MaxWidthWrapper>
@@ -49,10 +45,9 @@ export default function Home() {
       {/* What our customers say */}
       <section className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-50">
         <MaxWidthWrapper>
-          <h2 className="text-5xl text-center mb-6 font-bold">What our customers say?</h2>
+          <h2 className="text-5xl text-center mb-12 font-bold ">What our customers say?</h2>
           <div>
             <CustomersReview />
-
           </div>
         </MaxWidthWrapper>
       </section>
@@ -113,9 +108,9 @@ export default function Home() {
             <div className="flex flex-col gap-4">
               <div className="pb-6 text-center">
                 <h2 className="text-5xl font-bold text-center">Become a Tasker</h2>
-                <p>Join the ServiFix Community and Start Earning!</p>
+                <p className="font-light">Join the ServiFix Community and Start Earning!</p>
               </div>
-              <p className="font-medium">
+              <p >
                 Are you skilled in a trade or have a service to offer? Join ServiFix and turn your talents into income. Whether you are an experienced electrician, a talented painter, a professional chef, or a skilled builder, there is a place for you in our community.
               </p>
               <div className="flex gap-2 items-center">

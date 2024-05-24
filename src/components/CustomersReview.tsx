@@ -3,9 +3,9 @@ import { Check, Star } from 'lucide-react'
 
 const CustomersReview = () => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-6">
-            <div className="shadow-xl  p-6  gap-10 flex flex-col justify-between">
-                <p className="text-xl ">“Great platform for hiring local professionals. Found a builder for my project and could not be happier with the results!”</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-6 lg:gap-12 lg:px-24">
+            <div className="shadow-lg rounded-xl p-6 gap-10 flex flex-col justify-between">
+                <p className="text-xl italic">“Great platform for hiring local professionals. Found a builder for my project and could not be happier with the results!”</p>
 
                 <div className="flex gap-2">
                     <Image alt="customer-1" width={50} height={100} src={'/user-3.webp'} className="rounded-full ring-1 ring-zinc-400 object-cover" />
@@ -27,8 +27,8 @@ const CustomersReview = () => {
                     </div>
                 </div>
             </div>
-            <div className="shadow-xl p-6  gap-10 flex flex-col justify-between">
-                <p className="text-xl ">“The best website for hiring services, I just got my car fixed after a long time. Very good experience. Thanks!!”</p>
+            <div className="shadow-lg rounded-xl p-6 gap-10 flex flex-col justify-between">
+                <p className="text-xl italic">“The best website for hiring services, I just got my car fixed after a long time. Very good experience. Thanks!!”</p>
 
                 <div className="flex gap-2">
                     <Image alt="customer-1" width={50} height={50} src={'/user-1.jpg'} className="rounded-full ring-1 ring-zinc-400" />
@@ -50,8 +50,8 @@ const CustomersReview = () => {
                     </div>
                 </div>
             </div>
-            <div className="shadow-xl  p-6  gap-10 flex flex-col justify-between">
-                <p className="text-xl ">“Great service by the taskers, I finally found a person who take  my 4 dogs for a walk every morning”</p>
+            <div className="shadow-lg rounded-xl p-6 gap-10 flex flex-col justify-between">
+                <p className="text-xl italic">“Great service by the taskers, I finally found a person who take  my 4 dogs for a walk every morning”</p>
 
                 <div className="flex gap-2">
                     <Image alt="customer-1" width={50} height={100} src={'/user-2.jpg'} className="rounded-full ring-1 ring-zinc-400" />
@@ -73,8 +73,8 @@ const CustomersReview = () => {
                     </div>
                 </div>
             </div>
-            <div className="shadow-xl  p-6  gap-10 flex flex-col justify-between">
-                <p className="text-xl ">“ServiFix connected me with a reliable handyman who fixed my plumbing issues in no time.”</p>
+            <div className="shadow-lg rounded-xl p-6 gap-10 flex flex-col justify-between">
+                <p className="text-xl italic">“ServiFix connected me with a reliable handyman who fixed my plumbing issues in no time.”</p>
 
                 <div className="flex gap-2">
                     <Image alt="customer-1" width={50} height={100} src={'/user-4.webp'} className="rounded-full ring-1 ring-zinc-400" />
@@ -96,7 +96,6 @@ const CustomersReview = () => {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }
