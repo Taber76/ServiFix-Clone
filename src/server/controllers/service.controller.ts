@@ -47,7 +47,8 @@ export default class ServiceController {
         orderBy: [{ rating: 'desc' }]
       })
       if (!services) return res.status(404).json({ msg: 'No services found' })
-      return res.status(200).json(services)
+      const serviceType = await prisma.serviceType.findUnique({ where: { id: Number(service_type_id) } })
+      return res.status(200).json({ serviceType, services })
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
     }
