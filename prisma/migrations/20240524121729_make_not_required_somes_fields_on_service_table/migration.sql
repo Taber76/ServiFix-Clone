@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "services" ALTER COLUMN "hourly_price" DROP NOT NULL,
+ALTER COLUMN "rating" DROP NOT NULL,
+ALTER COLUMN "reviews" DROP NOT NULL,
+ALTER COLUMN "times_hired" DROP NOT NULL;
