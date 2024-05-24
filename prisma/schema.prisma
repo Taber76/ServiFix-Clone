@@ -32,6 +32,8 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  services Service[]
+
   @@map("users")
 }
 
@@ -39,4 +41,37 @@ enum Role {
   ADMIN
   CUSTUMER
   SUPPLIER
+}
+
+model ServiceType {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  url_image   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  services Service[]
+
+  @@map("service_types")
+}
+
+model Service {
+  id           Int      @id @default(autoincrement())
+  description  String
+  hourly_price Float?
+  rating       Float?
+  reviews      Float?
+  times_hired  Float?
+  shown        Boolean  @default(true)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user_id         Int
+  user            User        @relation(fields: [user_id], references: [id])
+  service_type_id Int
+  service_type    ServiceType @relation(fields: [service_type_id], references: [id])
+
+  @@map("services")
 }
