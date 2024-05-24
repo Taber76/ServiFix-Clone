@@ -35,7 +35,7 @@ export default class ServiceController {
     }
   }
 
-  static async getBestServices(req: NextApiRequest, res: NextApiResponse) {
+  static async getBestServicesByServiceTypeId(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { number_services, service_type_id } = req.query
       const services = await prisma.service.findMany({
@@ -53,6 +53,37 @@ export default class ServiceController {
       return res.status(500).json({ msg: 'Internal server error.', error })
     }
   }
+
+  static async getBestServicesOfEachType(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const services = await prisma.service.groupBy({
+        by: ['service_type_id'],
+        _max: {
+          rating: true
+        }
+      });
+
+      if (!services || services.length === 0) return res.status(404).json({ msg: 'No services found' });
+
+      const bestServicesByType = await Promise.all(services.map(async (service) => {
+        const { _max: { rating }, service_type_id } = service;
+        const bestService = await prisma.service.findFirst({
+          where: {
+            service_type_id,
+            rating
+          }
+        });
+        return bestService;
+      }));
+
+      const serviceTypes = await prisma.serviceType.findMany();
+
+      return res.status(200).json({ serviceTypes, bestServicesByType });
+    } catch (error) {
+      return res.status(500).json({ msg: 'Internal server error.', error });
+    }
+  }
+
 
   static async getByServiceId(req: NextApiRequest, res: NextApiResponse) {
     try {
