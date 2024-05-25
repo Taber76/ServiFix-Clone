@@ -1,7 +1,12 @@
-import { AllServices } from '@/services/getAllServices'
-import { create } from 'zustand'
+import { AllServices } from '@/services/getAllServices';
+import { create } from 'zustand';
 
-export const useStore = create((set) => ({
+interface ServiceStore {
+    services: AllServices[];
+    setServices: (services: AllServices[]) => void;
+}
+
+export const useStore = create<ServiceStore>((set) => ({
     services: [],
-    setServices: (services: AllServices) => set({ services }),
-}))
+    setServices: (services: AllServices[]) => set({ services }),
+}));
