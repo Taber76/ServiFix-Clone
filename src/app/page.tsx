@@ -21,7 +21,7 @@ export default function Home() {
               <Select />
             </div>
 
-            <Image src={'/main.jpg'} alt="Builders" width={1000} height={10} className="rounded-xl shadow-lg" />
+            <Image src={'/main.jpg'} alt="Builders" width={1024} height={10} className="rounded-xl aspect-[3/2] shadow-lg" />
           </div>
         </MaxWidthWrapper >
       </section>
@@ -94,7 +94,7 @@ export default function Home() {
 
             </div>
 
-            <Image src='/how-it-works.svg' width={100} height={100} alt="how-it-works" className="w-4/5 md:w-1/2" />
+            <Image src='/how-it-works.svg' width={100} height={100} alt="how-it-works" className="w-4/5 aspect-[4/5] md:w-1/2 md:aspect-square" />
           </div>
         </MaxWidthWrapper>
       </section>
@@ -103,7 +103,7 @@ export default function Home() {
       <section className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-50">
         <MaxWidthWrapper>
           <div className="flex gap-12 px-6 justify-between items-center flex-col-reverse lg:flex-row">
-            <Image src='/become-tasker.svg' width={100} height={100} alt="how-it-works" className="w-4/5 md:w-1/2" />
+            <Image src='/become-tasker.svg' width={400} height={100} alt="how-it-works" className="w-4/5 aspect-[4/5] md:w-[400px] md:aspect-square" />
 
             <div className="flex flex-col gap-4">
               <div className="pb-6 text-center">
