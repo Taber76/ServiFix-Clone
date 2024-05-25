@@ -4,8 +4,8 @@ import Link from "next/link"
 import MaxWidthWrapper from "./MaxWidthWrapper"
 
 
-import React, { useEffect } from "react";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, User } from "@nextui-org/react";
+import React, { useState } from "react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, NavbarMenuToggle, Navbar as Nav, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
 export function UserAvatar() {
     return (
         <div className="flex items-center gap-4">
@@ -47,56 +47,118 @@ export function UserAvatar() {
 const Navbar = () => {
     const isLoggedIn = false
 
+    const menuItemsLogged = [
+        "Profile",
+        "About",
+        "Services",
+        "Help & Feedback",
+        "Settings",
+        "Log Out",
+    ];
+    const menuItemsDefault = [
+        "Login",
+        "Signup",
+        "About",
+        "Services",
+        "Help & Feedback",
+    ];
+
     return (
-        <nav className='sticky z-[100] h-16 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all'>
-            <MaxWidthWrapper>
-                <div className='flex h-full items-center justify-between border-b border-zinc-200 text-black'>
-                    <Link href='/' className='flex z-40 font-semibold text-xl'>
-                        SERVI <span className="text-green-800">FIX</span>
-                    </Link>
-
-                    <div className='h-full flex items-center space-x-4'>
-                        <Link
-                            href='#'
-                            className="hover:bg-zinc-200 transition-all p-2 rounded-md"
-                        >
-                            About
-                        </Link>
-                        <Link
-                            href='#'
-                            className="hover:bg-zinc-200 transition-all p-2 rounded-md">
-                            Services
+        <>
+            {/* desktop navbar     */}
+            <nav className='sticky z-[100] h-16 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all'>
+                <MaxWidthWrapper>
+                    <div className='flex h-full items-center justify-between border-b border-zinc-200 text-black'>
+                        <Link href='/' className='flex z-40 font-semibold text-xl'>
+                            SERVI <span className="text-green-800">FIX</span>
                         </Link>
 
-                        {
-                            isLoggedIn ? (
-                                null
-                            ) : (
-                                <Link
-                                    href='/login'
-                                    className="hover:bg-zinc-200 transition-all p-2 rounded-md">
-                                    Login
-                                </Link>
-                            )
-                        }
+                        {/* desktop navigation */}
+                        <div className='h-full hidden md:flex items-center space-x-4'>
+                            <Link
+                                href='#'
+                                className="hover:bg-zinc-200 transition-all p-2 rounded-md"
+                            >
+                                About
+                            </Link>
+                            <Link
+                                href='#'
+                                className="hover:bg-zinc-200 transition-all p-2 rounded-md">
+                                Services
+                            </Link>
 
-                        <div className='h-8 w-px bg-zinc-200 hidden sm:block' />
+                            {
+                                isLoggedIn ? (
+                                    null
+                                ) : (
+                                    <Link
+                                        href='/login'
+                                        className="hover:bg-zinc-200 transition-all p-2 rounded-md">
+                                        Login
+                                    </Link>
+                                )
+                            }
 
-                        {
-                            isLoggedIn ? (
-                                <UserAvatar />
-                            ) : (
-                                <Link
-                                    href='/signup'
-                                    className='hidden sm:flex items-center gap-1 bg-green-600 p-2 rounded-md text-white hover:bg-green-700 transition-all px-4 '>
-                                    Sign up
-                                </Link>
-                            )
-                        }
+                            <div className='h-8 w-px bg-zinc-200 hidden sm:block' />
+
+                            {
+                                isLoggedIn ? (
+                                    <UserAvatar />
+                                ) : (
+                                    <Link
+                                        href='/signup'
+                                        className='hidden sm:flex items-center gap-1 bg-green-600 p-2 rounded-md text-white hover:bg-green-700 transition-all px-4 '>
+                                        Sign up
+                                    </Link>
+                                )
+                            }
+                        </div>
+
+                        {/* mobile burger */}
+                        <div className='h-full flex md:hidden items-center space-x-4'>
+                            <Nav>
+                                <NavbarMenuToggle
+                                    className="md:hidden" />
+                                <NavbarMenu>
+                                    {isLoggedIn && menuItemsLogged.map((item, index) => (
+                                        <NavbarMenuItem key={`${item}-${index}`}>
+                                            <Link
+                                                color={
+                                                    index === 1 ? "red-600" : index === menuItemsLogged.length - 1 ? "danger" : "foreground"
+                                                }
+                                                className={`${index === menuItemsLogged.length - 1
+                                                    ? "text-red-600"
+                                                    : "text-black"
+                                                    } w-full  hover:bg-slate-100 p-2 rounded-lg transition-all`}
+                                                href={`/${item.toLowerCase().replaceAll(" ", "")}`}
+
+                                            >
+                                                {item}
+                                            </Link>
+                                        </NavbarMenuItem>
+                                    ))}
+                                    {!isLoggedIn && menuItemsDefault.map((item, index) => (
+                                        <NavbarMenuItem key={`${item}-${index}`}>
+                                            <Link
+                                                color={
+                                                    index === 1 ? "red-600" : index === menuItemsDefault.length - 1 ? "danger" : "foreground"
+                                                }
+                                                className={'w-full hover:bg-slate-100 p-2 rounded-lg transition-all'}
+                                                href={`/${item.toLowerCase().replaceAll(" ", "")}`}
+                                            >
+                                                {item}
+                                            </Link>
+                                        </NavbarMenuItem>
+                                    ))}
+                                </NavbarMenu>
+                            </Nav>
+                        </div>
                     </div>
-                </div>
-            </MaxWidthWrapper >
-        </nav >
+                </MaxWidthWrapper >
+            </nav >
+
+
+        </>
     )
 }
 
