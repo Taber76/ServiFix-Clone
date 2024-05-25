@@ -20,8 +20,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={recursive.className} >
         <Navbar />
-        {children}
-        <Footer />
+        <main className='flex flex-col min-h-[calc(100vh-4rem-1px)]'>
+          <div className='flex-1 flex flex-col h-full'>
+            {children}
+          </div>
+          <Footer />
+        </main>
       </body>
     </html>
   );
