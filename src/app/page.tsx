@@ -5,6 +5,8 @@ import { ArrowRight, Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import ServiceCard from '@/components/ServiceCard'
+import WordRotate from "@/components/magicui/word-rotate";
+
 
 
 export default function Home() {
@@ -16,7 +18,32 @@ export default function Home() {
         <MaxWidthWrapper>
           <div className="flex flex-col text-center justify-center items-center gap-7">
             <div className=" flex flex-col gap-6 items-center justify-center">
-              <h1 className="text-5xl lg:text-7xl font-bold">Hire & Search Talents</h1>
+              <h1 className="text-5xl lg:text-7xl font-bold">Search & Hire {
+                <WordRotate
+                  className="text-4xl lg:text-6xl font-bold text-green-600"
+                  words={[
+                    "Professionals",
+                    "Taskers",
+                    "Talents",
+                    "Experts",
+                    "Specialists",
+                    "Contractors",
+                    "Freelancers",
+                    "Workers",
+                    "Service Providers",
+                    "Technicians",
+                    "Artisans",
+                    "Consultants",
+                    "Practitioners",
+                    "Personnel",
+                    "Craftsmen",
+                    "Labor",
+                    "Technologists",
+                    "Assistants",
+                    "Helpers",
+                    "Aides"
+                  ]} />
+              }</h1>
               <h3 className="text-xl ">Go ahead a find your new tasker</h3>
               <Select />
             </div>
