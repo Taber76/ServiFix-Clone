@@ -9,7 +9,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const middlewareResponse = AuthMiddleware.checkAuth(req, ['SUPPLIER']);
   if (!middlewareResponse.success) return res.status(401).json({ msg: 'Unauthorized.' });;
-  req.body['user_id'] = middlewareResponse.user_id
+  req.query['user_id'] = middlewareResponse.user_id
 
   return ServiceController.delete(req, res);
 }
