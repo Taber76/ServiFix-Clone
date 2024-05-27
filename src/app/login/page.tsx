@@ -88,7 +88,7 @@ const Login = () => {
                                 className="flex items-center justify-between gap-4 flex-wrap">
 
                                 <p className="text-sm mt-4">
-                                    Already have an account? {' '}
+                                    Do not have an account? {' '}
                                     <a
                                         href="/signup"
                                         className="text-sm text-green-700 hover:underline mt-4">

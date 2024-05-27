@@ -1,3 +1,5 @@
+'use client'
+
 import CustomersReview from "@/components/CustomersReview";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Select from "@/components/ui/Select";
@@ -6,10 +8,28 @@ import Image from "next/image";
 import Link from "next/link";
 import ServiceCard from '@/components/ServiceCard'
 import WordRotate from "@/components/magicui/word-rotate";
+import { DialogModal } from "@/components/Dialog";
+import { useState } from "react";
+import { Button } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 
 
 export default function Home() {
+
+  const isLoggedIn = false
+
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter()
+
+  const handleClick = () => {
+    isLoggedIn ? setIsOpen(false) : setIsOpen(true)
+
+    if (isLoggedIn) {
+      router.push('/become-a-tasker')
+    }
+  }
+
   return (
 
     <main className="bg-zinc-50 text-zinc-950">
@@ -157,17 +177,18 @@ export default function Home() {
                 <p>Community Support</p>
               </div>
 
-              <Link
-                href='/signup'
+              <Button
+                onClick={() => handleClick()}
                 className='flex items-center gap-1 justify-center w-4/5 md:w-2/3 lg:w-1/2 self-center bg-green-600 p-2 rounded-md text-white hover:bg-green-700 transition-all px-4 mt-10'>
                 Get started
                 <ArrowRight size={20} />
-              </Link>
+              </Button>
             </div>
-
           </div>
         </MaxWidthWrapper>
       </section>
+
+      <DialogModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </main>
   );
 }
