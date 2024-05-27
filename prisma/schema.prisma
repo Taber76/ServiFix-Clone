@@ -16,7 +16,7 @@ datasource db {
 // Models
 model User {
   id          Int      @id @default(autoincrement())
-  username    String
+  username    String   @unique
   password    String
   name        String
   surname     String
@@ -26,7 +26,7 @@ model User {
   description String?
   personal_id String?
   rating      Float?
-  role        Role     @default(CUSTUMER)
+  role        Role     @default(SUPPLIER)
   key         String
   active      Boolean  @default(false)
   createdAt   DateTime @default(now())
