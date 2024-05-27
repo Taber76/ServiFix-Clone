@@ -3,9 +3,11 @@
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import axios from 'axios'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import React, { FormEvent } from 'react'
 
 const Signup = () => {
+    const router = useRouter()
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         const form = e.target as HTMLFormElement
@@ -18,6 +20,8 @@ const Signup = () => {
         const username = form.querySelector('#username-input') as HTMLInputElement
 
         const EMAIL_REGEX = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+
+        const USERNAME_REGEX = /^[a-zA-Z0-9_.]{2,18}$/
 
 
         try {
@@ -38,10 +42,15 @@ const Signup = () => {
                 throw new Error('Username must be at least 2 characters long');
             }
 
+            if (!USERNAME_REGEX.test(username.value)) {
+                throw new Error('Invalid username, username must only contain letters, numbers, underscores, and periods. It must be between 2 and 18 characters long. Spaces are allowed. ex. John_Doe');
+            }
+
             if (passwordInput.value !== confirmPasswordInput.value) {
                 passwordInput.value = ''
                 confirmPasswordInput.value = ''
-                throw new Error('Passwords do not match');
+                passwordInput.focus()
+                throw new Error('Passwords do not match, please try again');
             }
 
             if (passwordInput.value.length < 8) {
@@ -49,7 +58,7 @@ const Signup = () => {
             }
 
             if (!EMAIL_REGEX.test(emailInput.value)) {
-                throw new Error('Invalid email address');
+                throw new Error('Invalid email address. Please try again');
             }
 
             const user = {
@@ -60,16 +69,14 @@ const Signup = () => {
                 email: emailInput.value,
             }
 
-            const data = await axios.post('/api/auth/register', user)
+            const { data } = await axios.post('/api/auth/register', user)
 
+            if (data.status === 200) {
+                router.push('/services')
+            }
         } catch (error) {
             console.log(error);
-
         }
-
-
-
-
     }
 
     return (

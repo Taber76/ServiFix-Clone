@@ -4,7 +4,7 @@ import Link from "next/link"
 import MaxWidthWrapper from "./MaxWidthWrapper"
 import React, { useState } from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, NavbarMenuToggle, Navbar as Nav, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export function UserAvatar() {
     return (
@@ -47,6 +47,7 @@ export function UserAvatar() {
 const Navbar = () => {
     const isLoggedIn = false
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname()
 
     const menuItemsLogged = [
         "Profile",
@@ -133,7 +134,11 @@ const Navbar = () => {
                                                 className={`${index === menuItemsLogged.length - 1
                                                     ? "text-red-600"
                                                     : "text-black"
-                                                    } w-full  hover:bg-slate-100 p-2 rounded-lg transition-all`}
+                                                    } w-full  hover:bg-slate-100 p-2 rounded-lg transition-all 
+                                                    ${pathname === `/${item.toLowerCase().replaceAll(" ", "")}`
+                                                        ? "bg-zinc-200"
+                                                        : ""
+                                                    }`}
                                                 href={`/${item.toLowerCase().replaceAll(" ", "")}`}
 
                                             >
@@ -145,7 +150,11 @@ const Navbar = () => {
                                         <NavbarMenuItem key={`${item}-${index}`}>
                                             <Link
                                                 onClick={handleLinkClick}
-                                                className={'w-full hover:bg-slate-100 p-2 rounded-lg transition-all'}
+                                                className={`w-full hover:bg-slate-100 p-2 rounded-lg transition-all 
+                                                ${pathname === `/${item.toLowerCase().replaceAll(" ", "")}`
+                                                        ? "bg-zinc-200"
+                                                        : ""
+                                                    }`}
                                                 href={`/${item.toLowerCase().replaceAll(" ", "")}`}
                                             >
                                                 {item}
