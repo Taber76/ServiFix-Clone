@@ -1,15 +1,20 @@
 'use client'
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
+import { useToast } from '@/components/ui/use-toast'
+import { Button } from '@nextui-org/react'
 import axios from 'axios'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useState } from 'react'
 
 const Login = () => {
     const router = useRouter()
+    const [isLoading, setIsLoading] = useState(false)
+    const { toast } = useToast()
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
+
         const form = e.target as HTMLFormElement
         const emailInput = form.querySelector('#email-input') as HTMLInputElement
         const passwordInput = form.querySelector('#password-input') as HTMLInputElement
@@ -19,15 +24,26 @@ const Login = () => {
             password: passwordInput.value
         }
         try {
+            setIsLoading(true)
             const data = await axios.post('/api/auth/login', user)
-            console.log(data);
 
-            if (data.status === 200) {
+            if (data.status === 201) {
+                toast({
+                    title: 'Logged in successfully ✅',
+                    description: 'Welcome back',
+                })
                 router.push('/services')
             }
 
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            toast({
+                title: 'Error',
+                description: `${error.message}`,
+                variant: 'destructive'
+            })
+        } finally {
+            setIsLoading(false)
         }
 
 
@@ -80,18 +96,21 @@ const Login = () => {
                                     </a>
                                 </p>
                             </div>
-                            <button
+                            <Button
                                 type="submit"
+                                isLoading={isLoading}
                                 className="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150">
-                                Log in
-                            </button>
+                                {
+                                    isLoading ? 'Loading...' : 'Login'
+                                }
+                            </Button>
                         </form >
                     </div>
                 </div>
 
                 {/* SVG for Desktop */}
                 <div className='flex self-end '>
-                    <Image src='/login.svg' width={100} height={100} alt="how-it-works" className="w-full max-w-[800px] lg:block hidden" />
+                    <Image src='/login.svg' width={500} height={500} alt="world" className="w-full max-w-[800px] aspect-square lg:block hidden" />
                 </div>
             </main>
         </MaxWidthWrapper>
