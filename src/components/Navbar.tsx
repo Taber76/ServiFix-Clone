@@ -5,6 +5,8 @@ import MaxWidthWrapper from "./MaxWidthWrapper"
 import React, { useState } from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, NavbarMenuToggle, Navbar as Nav, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
+import { DialogModal } from "./Dialog";
+import { useRouter } from "next/navigation";
 
 export function UserAvatar() {
     return (
@@ -48,11 +50,25 @@ const Navbar = () => {
     const isLoggedIn = false
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname()
+    const router = useRouter()
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleLoginClick = (e: any) => {
+        e.preventDefault()
+        isLoggedIn
+            ? setIsModalOpen(false)
+            : setIsModalOpen(true)
+
+        if (isLoggedIn) {
+            router.push('/services')
+        }
+    }
 
     const menuItemsLogged = [
         "Profile",
-        "About",
         "Services",
+        "Become a Tasker",
         "Help & Feedback",
         "Settings",
         "Log Out",
@@ -60,7 +76,7 @@ const Navbar = () => {
     const menuItemsDefault = [
         "Login",
         "Signup",
-        "About",
+        "Become a Tasker",
         "Services",
         "Help & Feedback",
     ];
@@ -82,13 +98,20 @@ const Navbar = () => {
                         {/* desktop navigation */}
                         <div className='h-full hidden md:flex items-center space-x-4'>
                             <Link
-                                href='#'
+                                href='#about'
                                 className="hover:bg-zinc-200 transition-all p-2 rounded-md"
                             >
                                 About
                             </Link>
                             <Link
+                                href='#join-us'
+                                className="hover:bg-zinc-200 transition-all p-2 rounded-md"
+                            >
+                                Join us
+                            </Link>
+                            <Link
                                 href='#'
+                                onClick={handleLoginClick}
                                 className="hover:bg-zinc-200 transition-all p-2 rounded-md">
                                 Services
                             </Link>
@@ -135,11 +158,11 @@ const Navbar = () => {
                                                     ? "text-red-600"
                                                     : "text-black"
                                                     } w-full  hover:bg-slate-100 p-2 rounded-lg transition-all 
-                                                    ${pathname === `/${item.toLowerCase().replaceAll(" ", "")}`
+                                                    ${pathname === `/${item.toLowerCase().replaceAll(" ", "-")}`
                                                         ? "bg-zinc-200"
                                                         : ""
                                                     }`}
-                                                href={`/${item.toLowerCase().replaceAll(" ", "")}`}
+                                                href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
 
                                             >
                                                 {item}
@@ -151,11 +174,11 @@ const Navbar = () => {
                                             <Link
                                                 onClick={handleLinkClick}
                                                 className={`w-full hover:bg-slate-100 p-2 rounded-lg transition-all 
-                                                ${pathname === `/${item.toLowerCase().replaceAll(" ", "")}`
+                                                ${pathname === `/${item.toLowerCase().replaceAll(" ", "-")}`
                                                         ? "bg-zinc-200"
                                                         : ""
                                                     }`}
-                                                href={`/${item.toLowerCase().replaceAll(" ", "")}`}
+                                                href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
                                             >
                                                 {item}
                                             </Link>
@@ -169,6 +192,7 @@ const Navbar = () => {
             </nav >
 
 
+            <DialogModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
         </>
     )
 }

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
@@ -6,10 +5,8 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import Image from "next/image"
 import Link from "next/link"
 import { Dispatch, SetStateAction } from "react"
@@ -20,9 +17,6 @@ export function DialogModal({
     { isOpen: boolean, setIsOpen: Dispatch<SetStateAction<boolean>> }) {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild onClick={() => setIsOpen(false)}>
-                <Button variant="outline">Edit Profile</Button>
-            </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Oops!</DialogTitle>

@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   description: "Web application for searching and hiring services.",
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{

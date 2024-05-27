@@ -19,11 +19,11 @@ export default function Home() {
 
   const isLoggedIn = false
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter()
 
   const handleClick = () => {
-    isLoggedIn ? setIsOpen(false) : setIsOpen(true)
+    isLoggedIn ? setIsModalOpen(false) : setIsModalOpen(true)
 
     if (isLoggedIn) {
       router.push('/become-a-tasker')
@@ -100,7 +100,7 @@ export default function Home() {
       </section>
 
       {/* How does it work? */}
-      <section className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-100">
+      <section id="about" className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-100">
         <MaxWidthWrapper>
           <div className="flex gap-12 justify-between items-center flex-col lg:flex-row">
 
@@ -147,7 +147,7 @@ export default function Home() {
       </section>
 
       {/* Become a tasker */}
-      <section className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-50">
+      <section id="join-us" className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-50">
         <MaxWidthWrapper>
           <div className="flex gap-12 px-6 justify-between items-center flex-col-reverse lg:flex-row">
             <Image src='/become-tasker.svg' width={400} height={100} alt="how-it-works" className="w-4/5 aspect-[4/5] md:w-[400px] md:aspect-square" />
@@ -188,7 +188,7 @@ export default function Home() {
         </MaxWidthWrapper>
       </section>
 
-      <DialogModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <DialogModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </main>
   );
 }
