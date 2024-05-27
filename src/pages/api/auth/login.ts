@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import ServiceController from '@/server/controllers/service.controller';
+import AuthController from '@/server/controllers/auth.controller'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
+  if (req.method !== 'POST') {
     return res.status(405).json({ msg: 'Method not allowed' });
   }
-  return ServiceController.getBestServicesByServiceTypeId(req, res);
+  return AuthController.login(req, res);
 }
