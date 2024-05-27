@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import MaxWidthWrapper from "./MaxWidthWrapper"
-
-
 import React, { useState } from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, NavbarMenuToggle, Navbar as Nav, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+
 export function UserAvatar() {
     return (
         <div className="flex items-center gap-4">
@@ -46,6 +46,7 @@ export function UserAvatar() {
 
 const Navbar = () => {
     const isLoggedIn = false
+    const [isOpen, setIsOpen] = useState(false);
 
     const menuItemsLogged = [
         "Profile",
@@ -62,6 +63,10 @@ const Navbar = () => {
         "Services",
         "Help & Feedback",
     ];
+
+    const handleLinkClick = () => {
+        setIsOpen(false);
+    }
 
     return (
         <>
@@ -116,16 +121,15 @@ const Navbar = () => {
 
                         {/* mobile burger */}
                         <div className='h-full flex md:hidden items-center space-x-4'>
-                            <Nav>
+                            <Nav isMenuOpen={isOpen} onMenuOpenChange={setIsOpen}>
                                 <NavbarMenuToggle
+                                    onChange={() => setIsOpen(!isOpen)}
                                     className="md:hidden" />
                                 <NavbarMenu>
                                     {isLoggedIn && menuItemsLogged.map((item, index) => (
                                         <NavbarMenuItem key={`${item}-${index}`}>
                                             <Link
-                                                color={
-                                                    index === 1 ? "red-600" : index === menuItemsLogged.length - 1 ? "danger" : "foreground"
-                                                }
+                                                onClick={handleLinkClick}
                                                 className={`${index === menuItemsLogged.length - 1
                                                     ? "text-red-600"
                                                     : "text-black"
@@ -140,9 +144,7 @@ const Navbar = () => {
                                     {!isLoggedIn && menuItemsDefault.map((item, index) => (
                                         <NavbarMenuItem key={`${item}-${index}`}>
                                             <Link
-                                                color={
-                                                    index === 1 ? "red-600" : index === menuItemsDefault.length - 1 ? "danger" : "foreground"
-                                                }
+                                                onClick={handleLinkClick}
                                                 className={'w-full hover:bg-slate-100 p-2 rounded-lg transition-all'}
                                                 href={`/${item.toLowerCase().replaceAll(" ", "")}`}
                                             >
