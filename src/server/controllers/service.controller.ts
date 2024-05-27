@@ -139,7 +139,7 @@ export default class ServiceController {
 
   static async delete(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { id, user_id } = req.body
+      const { id, user_id } = req.query
       const service = await prisma.service.update({
         where: { id: Number(id), user_id: Number(user_id) },
         data: { active: false }
