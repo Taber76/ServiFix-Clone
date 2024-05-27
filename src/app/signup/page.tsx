@@ -1,6 +1,7 @@
 'use client'
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
+import { useToast } from '@/components/ui/use-toast'
 import axios from 'axios'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -8,6 +9,7 @@ import React, { FormEvent } from 'react'
 
 const Signup = () => {
     const router = useRouter()
+    const { toast } = useToast()
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         const form = e.target as HTMLFormElement
@@ -71,11 +73,31 @@ const Signup = () => {
 
             const { data } = await axios.post('/api/auth/register', user)
 
+            toast({
+                title: `${data.msg}`,
+                variant: 'default',
+                description: `Welcome ${data.user.name}!`,
+            })
+
+            // TODO: Redirect to services
             if (data.status === 200) {
                 router.push('/services')
             }
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            console.log(error.message);
+
+            if (error.response?.data.msg) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: `${error.response.data.msg}`,
+                })
+            }
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: `${error.message}`,
+            })
         }
     }
 
