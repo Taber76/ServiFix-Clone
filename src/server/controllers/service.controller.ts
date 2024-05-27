@@ -41,7 +41,8 @@ export default class ServiceController {
       const services = await prisma.service.findMany({
         where: {
           service_type_id: Number(service_type_id),
-          active: true
+          active: true,
+          shown: true
         },
         take: Number(number_services),
         orderBy: [{ rating: 'desc' }]
@@ -57,14 +58,16 @@ export default class ServiceController {
   static async getBestServicesOfEachType(req: NextApiRequest, res: NextApiResponse) {
     try {
       const services = await prisma.service.groupBy({
+        where: {
+          active: true,
+          shown: true
+        },
         by: ['service_type_id'],
         _max: {
           rating: true
         }
       });
-
       if (!services || services.length === 0) return res.status(404).json({ msg: 'No services found' });
-
       const bestServicesByType = await Promise.all(services.map(async (service) => {
         const { _max: { rating }, service_type_id } = service;
         const bestService = await prisma.service.findFirst({
@@ -75,15 +78,12 @@ export default class ServiceController {
         });
         return bestService;
       }));
-
       const serviceTypes = await prisma.serviceType.findMany();
-
       return res.status(200).json({ serviceTypes, bestServicesByType });
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error });
     }
   }
-
 
   static async getByServiceId(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -99,6 +99,8 @@ export default class ServiceController {
   static async create(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { description, hourly_price, user_id, service_type_id } = req.body
+      const serviceExist = await prisma.service.findFirst({ where: { user_id: Number(user_id), service_type_id: Number(service_type_id) } })
+      if (serviceExist) return res.status(400).json({ msg: 'Service already exists.' })
       const data = {
         description,
         hourly_price: hourly_price ? Number(hourly_price) : null,
