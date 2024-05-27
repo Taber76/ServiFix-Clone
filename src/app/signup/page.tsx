@@ -5,11 +5,15 @@ import { useToast } from '@/components/ui/use-toast'
 import axios from 'axios'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import React, { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
+import { Button } from "@nextui-org/react";
+
+
 
 const Signup = () => {
     const router = useRouter()
     const { toast } = useToast()
+    const [isLoading, setIsLoading] = useState(false)
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         const form = e.target as HTMLFormElement
@@ -22,14 +26,19 @@ const Signup = () => {
         const username = form.querySelector('#username-input') as HTMLInputElement
 
         const EMAIL_REGEX = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-
+        const NAME_REGEX = /^[a-zA-Z]+$/
         const USERNAME_REGEX = /^[a-zA-Z0-9_.]{2,18}$/
 
 
         try {
+            setIsLoading(true)
 
             if (!nameInput.value || !surnameInput.value || !emailInput.value || !passwordInput.value || !confirmPasswordInput.value || !username.value) {
                 throw new Error('Please fill in all fields');
+            }
+
+            if (!NAME_REGEX.test(nameInput.value) || !NAME_REGEX.test(surnameInput.value)) {
+                throw new Error('Name and surname must only contain letters');
             }
 
             if (nameInput.value.length < 2) {
@@ -71,7 +80,7 @@ const Signup = () => {
                 email: emailInput.value,
             }
 
-            const { data } = await axios.post('/api/auth/register', user)
+            const { data, status } = await axios.post('/api/auth/register', user)
 
             toast({
                 title: `${data.msg}`,
@@ -79,8 +88,7 @@ const Signup = () => {
                 description: `Welcome ${data.user.name}!`,
             })
 
-            // TODO: Redirect to services
-            if (data.status === 200) {
+            if (status === 201) {
                 router.push('/services')
             }
         } catch (error: any) {
@@ -98,6 +106,8 @@ const Signup = () => {
                 title: 'Error',
                 description: `${error.message}`,
             })
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -178,11 +188,14 @@ const Signup = () => {
                                     </a>
                                 </p>
                             </div>
-                            <button
+                            <Button
                                 type="submit"
+                                isLoading={isLoading}
                                 className="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150">
-                                Sign up
-                            </button>
+                                {
+                                    isLoading ? 'Loading...' : 'Sign up'
+                                }
+                            </Button>
                         </form>
                     </div>
                 </div>
