@@ -1,3 +1,5 @@
+'use client'
+
 import CustomersReview from "@/components/CustomersReview";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Select from "@/components/ui/Select";
@@ -6,10 +8,28 @@ import Image from "next/image";
 import Link from "next/link";
 import ServiceCard from '@/components/ServiceCard'
 import WordRotate from "@/components/magicui/word-rotate";
+import { DialogModal } from "@/components/Dialog";
+import { useState } from "react";
+import { Button } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 
 
 export default function Home() {
+
+  const isLoggedIn = false
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter()
+
+  const handleClick = () => {
+    isLoggedIn ? setIsModalOpen(false) : setIsModalOpen(true)
+
+    if (isLoggedIn) {
+      router.push('/become-a-tasker')
+    }
+  }
+
   return (
 
     <main className="bg-zinc-50 text-zinc-950">
@@ -80,7 +100,7 @@ export default function Home() {
       </section>
 
       {/* How does it work? */}
-      <section className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-100">
+      <section id="about" className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-100">
         <MaxWidthWrapper>
           <div className="flex gap-12 justify-between items-center flex-col lg:flex-row">
 
@@ -127,7 +147,7 @@ export default function Home() {
       </section>
 
       {/* Become a tasker */}
-      <section className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-50">
+      <section id="join-us" className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-50">
         <MaxWidthWrapper>
           <div className="flex gap-12 px-6 justify-between items-center flex-col-reverse lg:flex-row">
             <Image src='/become-tasker.svg' width={400} height={100} alt="how-it-works" className="w-4/5 aspect-[4/5] md:w-[400px] md:aspect-square" />
@@ -157,17 +177,18 @@ export default function Home() {
                 <p>Community Support</p>
               </div>
 
-              <Link
-                href='/signup'
+              <Button
+                onClick={() => handleClick()}
                 className='flex items-center gap-1 justify-center w-4/5 md:w-2/3 lg:w-1/2 self-center bg-green-600 p-2 rounded-md text-white hover:bg-green-700 transition-all px-4 mt-10'>
                 Get started
                 <ArrowRight size={20} />
-              </Link>
+              </Button>
             </div>
-
           </div>
         </MaxWidthWrapper>
       </section>
+
+      <DialogModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </main>
   );
 }
