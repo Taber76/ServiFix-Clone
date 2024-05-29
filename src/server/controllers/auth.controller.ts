@@ -43,8 +43,8 @@ export default class AuthController {
         data
       })
 
-      const sendEmail = await EmailHelper.sendVerificationEmail(newUser.email, newUser.id, key)
-      if (!sendEmail.success) return res.status(500).json({ msg: 'Dont send verification email, contact support.', error: sendEmail.data })
+      await EmailHelper.sendVerificationEmail(newUser.email, newUser.id, key)
+      //if (!sendEmail.success) return res.status(500).json({ msg: 'Dont send verification email, contact support.', error: sendEmail.data })
 
       return res.status(201).json({ msg: 'User created.', user: { ...newUser, password: undefined, key: undefined } })
 
@@ -66,8 +66,7 @@ export default class AuthController {
         where: { id: Number(id) },
         data: { active: true }
       })
-      return res.status(200).json({ msg: 'User verified.' })
-
+      res.redirect(307, '/login')
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error, user not verified.', error })
     }
