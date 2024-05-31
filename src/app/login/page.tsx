@@ -20,7 +20,7 @@ const Login = () => {
         const passwordInput = form.querySelector('#password-input') as HTMLInputElement
 
         const user = {
-            email: emailInput.value,
+            user: emailInput.value,
             password: passwordInput.value
         }
         try {

@@ -12,9 +12,9 @@ export default class AuthHelper {
   }
 
   static generateKey() {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = '0123456789';
     let key = '';
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 6; i++) {
       key += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return key;
@@ -24,19 +24,24 @@ export default class AuthHelper {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
   }
 
-  static generateToken(id: number, role: string) {
-    return jwt.sign({ user_id: id, role }, process.env.JWT_SECRET as string)
+  static generateToken(user: any) {
+    return jwt.sign({
+      ...user,
+      user_id: user.id,
+      password: undefined,
+      key: undefined,
+    }, process.env.JWT_SECRET as string)
   }
 
   private static isJWTPayload(token: string | JwtPayload): token is JwtPayload {
     return (token as JwtPayload).role !== undefined
   }
 
-  static authenticateUserToken(token: string, userType: string[]) {
+  static authenticateUserToken(token: string, userTypes: string[]) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string)
       if (this.isJWTPayload(decoded)) {
-        if (userType.includes(decoded.role)) {
+        if (userTypes.includes(decoded.role)) {
           return {
             success: true,
             data: decoded
