@@ -87,10 +87,13 @@ export default class AuthController {
       if (!userDB.active) return res.status(401).json({ msg: 'User not verified.' })
       const isMatch = await bcrypt.compare(password, userDB.password)
       if (!isMatch) return res.status(401).json({ msg: 'Invalid password.' })
-      const token = AuthHelper.generateToken(userDB.id, userDB.role)
-      return res.status(202).json({ msg: 'Login successful.', token, user: { ...userDB, password: undefined, key: undefined } })
+      const accessToken = AuthHelper.generateToken(userDB)
+      return res
+        .setHeader('Set-Cookie', `accessToken=${accessToken}; Path=/; SameSite=Lax; Secure; Max-Age=${process.env.JWT_EXPIRES}`)
+        .status(202).json({ msg: 'Login successful.' })
 
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
     }
   }
