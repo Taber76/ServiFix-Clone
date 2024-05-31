@@ -13,10 +13,33 @@ export default class ChatController {
             { user1_id: Number(user_id) },
             { user2_id: Number(user_id) }
           ]
+        },
+        select: {
+          id: true,
+          user1: {
+            select: {
+              name: true,
+              id: true
+            }
+          },
+          user2: {
+            select: {
+              name: true,
+              id: true
+            }
+          }
         }
       })
-      if (!chats) return res.status(404).json({ error: 'No chats found' })
-      return res.status(200).json(chats)
+      if (chats.length === 0) return res.status(404).json({ error: 'No chats found.' })
+      const formatedChats = chats.map(chat => {
+        const otherUser = chat.user1.id === Number(user_id) ? chat.user2 : chat.user1
+        return {
+          chat_id: chat.id,
+          otherUser
+        }
+      })
+
+      return res.status(200).json(formatedChats)
     } catch (error) {
       return res.status(500).json({ error })
     }
@@ -29,8 +52,18 @@ export default class ChatController {
         where: {
           chat_id: Number(chat_id)
         },
+        select: {
+          message: true,
+          timestamp: true,
+          sender: {
+            select: {
+              name: true,
+              id: true
+            }
+          }
+        },
         orderBy: {
-          timestamp: 'desc'
+          timestamp: 'asc'
         },
         take: number_of_messages ? Number(number_of_messages) : 10
       })
