@@ -1,4 +1,4 @@
-import { UserType } from "../types/prisma.types";
+import { UserType } from "../../types/prisma.types";
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 export default class AuthHelper {

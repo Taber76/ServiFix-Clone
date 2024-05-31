@@ -28,11 +28,15 @@ model User {
   rating      Float?
   role        Role     @default(SUPPLIER)
   key         String
-  active      Boolean  @default(false)
+  verified    Boolean  @default(false)
+  active      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  services Service[]
+  services       Service[]
+  chats_as_user1 Chat[]    @relation("chats_as_user1")
+  chats_as_user2 Chat[]    @relation("chats_as_user2")
+  messages       Message[]
 
   @@map("users")
 }
@@ -74,4 +78,31 @@ model Service {
   service_type    ServiceType @relation(fields: [service_type_id], references: [id])
 
   @@map("services")
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user1_id Int
+  user1    User      @relation("chats_as_user1", fields: [user1_id], references: [id])
+  user2_id Int
+  user2    User      @relation("chats_as_user2", fields: [user2_id], references: [id])
+  messages Message[]
+
+  @@map("chats")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  message   String
+  timestamp DateTime @default(now())
+
+  sender_id Int
+  sender    User @relation(fields: [sender_id], references: [id])
+  chat_id   Int
+  chat      Chat @relation(fields: [chat_id], references: [id])
+
+  @@map("messages")
 }

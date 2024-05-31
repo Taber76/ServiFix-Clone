@@ -5,7 +5,7 @@ export default class EmailTemplates {
   static verifyEmail(id: number, key: string) {
     return `
     <p>Welcome to ServiceFix!</p>
-    <p>To confirm your account, click the link below:</p>
+    <p>To verify your account, click the link below:</p>
     <p>
       <a href="${url}/api/auth/verify?id=${id}&key=${key}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: #007bff; text-align: center; text-decoration: none; border-radius: 5px;">
         Verify account
