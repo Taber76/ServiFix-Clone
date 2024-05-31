@@ -59,14 +59,14 @@ export default class AuthController {
       const { id, key } = req.query
       const user = await prisma.user.findUnique({ where: { id: Number(id) } })
       if (!user) return res.status(404).json({ msg: 'User not found.' })
-      if (user.active) return res.status(400).json({ msg: 'User already verified.' })
+      if (user.verified) return res.status(400).json({ msg: 'User already verified.' })
       if (user.key !== key) return res.status(403).json({ msg: 'Invalid key.' })
 
       await prisma.user.update({
         where: { id: Number(id) },
-        data: { active: true }
+        data: { verified: true }
       })
-      res.redirect(307, '/login')
+      res.status(202).json({ msg: 'User verified.' })
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error, user not verified.', error })
     }
@@ -88,7 +88,7 @@ export default class AuthController {
       const isMatch = await bcrypt.compare(password, userDB.password)
       if (!isMatch) return res.status(401).json({ msg: 'Invalid password.' })
       const token = AuthHelper.generateToken(userDB.id, userDB.role)
-      return res.status(202).json({ msg: 'Login successful.', token })
+      return res.status(202).json({ msg: 'Login successful.', token, user: { ...userDB, password: undefined, key: undefined } })
 
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
