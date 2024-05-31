@@ -94,4 +94,46 @@ export default class AuthController {
       return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
     }
   }
+
+
+  static async forgotPassword(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const { email } = req.body
+      if (!email) return res.status(400).json({ msg: 'Invalid data.' })
+      const user = await prisma.user.findUnique({ where: { email } })
+      if (!user) return res.status(404).json({ msg: 'User not found.' })
+
+      const passwordRestetKey = AuthHelper.generateKey()
+      const sendEmail = await EmailHelper.sendResetPasswordEmail(email, passwordRestetKey)
+      if (!sendEmail.success) return res.status(500).json({ msg: 'Dont send verification email, contact support.' })
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { password_reset_key: passwordRestetKey }
+      })
+      return res.status(202).json({ msg: 'Password reset email sent.' })
+    } catch (error) {
+      return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
+    }
+  }
+
+
+  static async resetPassword(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const { email, key, password } = req.body
+      if (!email || !key || !password) return res.status(400).json({ msg: 'Invalid data.' })
+      const user = await prisma.user.findUnique({ where: { email } })
+      if (!user) return res.status(404).json({ msg: 'User not found.' })
+      if (user.password_reset_key !== key) return res.status(403).json({ msg: 'Invalid key.' })
+
+      const hashedPassword = await bcrypt.hash(password, 10)
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { password: hashedPassword, password_reset_key: null }
+      })
+      return res.status(202).json({ msg: 'Password reset successful.' })
+    } catch (error) {
+      return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
+    }
+  }
+
 }
