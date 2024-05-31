@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/server/lib/prisma'
 
-class UserController {
+export default class UserController {
 
   static async getAll(_: NextApiRequest, res: NextApiResponse) {
     try {
@@ -62,6 +62,4 @@ class UserController {
   }
 
 }
-
-export default UserController
 
