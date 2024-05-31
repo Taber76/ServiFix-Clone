@@ -15,23 +15,24 @@ datasource db {
 
 // Models
 model User {
-  id          Int      @id @default(autoincrement())
-  username    String   @unique
-  password    String
-  name        String
-  surname     String
-  email       String   @unique
-  photo       String?
-  phone       String?
-  description String?
-  personal_id String?
-  rating      Float?
-  role        Role     @default(SUPPLIER)
-  key         String
-  verified    Boolean  @default(false)
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                 Int      @id @default(autoincrement())
+  username           String   @unique
+  password           String
+  name               String
+  surname            String
+  email              String   @unique
+  photo              String?
+  phone              String?
+  description        String?
+  personal_id        String?
+  rating             Float?
+  role               Role     @default(SUPPLIER)
+  key                String
+  password_reset_key String?
+  verified           Boolean  @default(false)
+  active             Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   services       Service[]
   chats_as_user1 Chat[]    @relation("chats_as_user1")
