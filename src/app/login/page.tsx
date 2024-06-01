@@ -20,17 +20,18 @@ const Login = () => {
         const passwordInput = form.querySelector('#password-input') as HTMLInputElement
 
         const user = {
-            email: emailInput.value,
+            user: emailInput.value,
             password: passwordInput.value
         }
         try {
             setIsLoading(true)
             const data = await axios.post('/api/auth/login', user)
 
-            if (data.status === 201) {
+            if (data.status === 202) {
                 toast({
-                    title: 'Logged in successfully ✅',
-                    description: 'Welcome back',
+                    title: `Welcome back ${data.data.user.name} 👋`,
+                    description: `${data.data.msg} ✅`,
+                    variant: 'default'
                 })
                 router.push('/services')
             }
