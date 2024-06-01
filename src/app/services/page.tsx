@@ -6,7 +6,6 @@ import LocationIcon from '@/components/icons/LocationIcon'
 import BillIcon from '@/components/icons/BillIcon'
 import Filter from '@/components/Filter'
 
-import VerifiedBadge from '@/components/VerifiedBadge'
 import { posts } from '@/lib/data'
 
 
