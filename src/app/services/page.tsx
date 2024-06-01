@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import { Star } from 'lucide-react'
+import { CheckCircle2, Star } from 'lucide-react'
 import LocationIcon from '@/components/icons/LocationIcon'
 import BillIcon from '@/components/icons/BillIcon'
 import Filter from '@/components/Filter'
@@ -53,13 +53,13 @@ const Services = () => {
                                                 <h3 className='text-lg md:text-xl font-semibold flex gap-2'>
                                                     {post.category.toUpperCase()}
                                                 </h3>
-                                                <p className='text-xs md:text-sm'>{post.title}</p>
+                                                <p className='text-xs md:text-sm lg:text-base'>{post.title}</p>
                                                 <span
-                                                    className='text-xs md:text-md font-normal flex gap-1 items-center'>
+                                                    className='text-xs md:text-md lg:text-base font-normal flex gap-1 items-center'>
                                                     by: {post.by} {
                                                         post.isVerified
                                                         &&
-                                                        <VerifiedBadge />
+                                                        <CheckCircle2 className='fill-sky-500 stroke-white stroke-2 size-4' />
                                                     }
                                                 </span>
 
