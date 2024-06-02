@@ -7,13 +7,21 @@ import BillIcon from '@/components/icons/BillIcon'
 import Filter from '@/components/Filter'
 
 import { posts } from '@/lib/data'
+import useFilterPosts from '@/hooks/useFilterPosts'
 
 
 const Services = () => {
+
+    const { filterPosts } = useFilterPosts();
+
+    const filteredPosts = filterPosts(posts);
+
+
     const dateConverter = (date: string) => {
         const newDate = new Date(date);
         return newDate.toLocaleDateString();
     }
+
     return (
         <main className='min-h-[calc(100vh-9rem-1px)] flex flex-col justify-center h-full py-12'>
             <MaxWidthWrapper>
@@ -26,10 +34,8 @@ const Services = () => {
                             posts.length > 0 && posts.length < 2 ? 'Service' : 'Services'
                         }</h2>
                         <div className='flex flex-col gap-2 md:gap-4 w-full'>
-
-
                             {
-                                posts.map((post) => (
+                                filteredPosts.map((post) => (
                                     <div key={crypto.randomUUID()}
                                         className='flex items-center gap-2 md:gap-4 p-2 md:p-4 bg-zinc-50 hover:shadow-md cursor-pointer rounded-lg hover:scale-[1.01] transition-all odd:bg-zinc-100 justify-between w-full shadow-md'>
                                         <div className='flex flex-row items-center gap-4 '>
@@ -92,7 +98,6 @@ const Services = () => {
                                                         post.reviews.length > 0 && <p className='text-sm font-light ml-2'>({post.reviews.length})</p>
                                                     }
                                                 </div>
-
                                             </div>
                                         </div>
 
