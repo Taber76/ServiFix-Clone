@@ -51,9 +51,9 @@ const Login = () => {
     }
     return (
         <MaxWidthWrapper>
-            <main className='flex w-full flex-row-reverse items-center justify-center lg:justify-between lg:gap-12'>
+            <main className='flex w-full  flex-row-reverse items-center justify-center lg:justify-between lg:gap-24'>
                 {/* Login form */}
-                <div className="flex w-full md:w-1/2 lg:w-2/3 flex-col items-center justify-center h-full">
+                <div className="flex w-full md:w-1/2 lg:w-full flex-col items-center justify-center h-full">
                     <div className="w-full md:min-w-96 max-w-2xl bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Login</h2>
                         <form
@@ -68,7 +68,7 @@ const Login = () => {
                                 autoComplete='off'
                                 spellCheck='false'
                                 maxLength={50}
-                                placeholder="Email" />
+                                placeholder="Email or username" />
 
                             <input
                                 id='password-input'
@@ -110,8 +110,8 @@ const Login = () => {
                 </div>
 
                 {/* SVG for Desktop */}
-                <div className='flex self-end '>
-                    <Image src='/login.svg' width={500} height={500} alt="world" className="w-full max-w-[800px] aspect-square lg:block hidden" />
+                <div className='hidden lg:flex w-full self-end'>
+                    <Image src='/login.svg' width={1000} height={100} priority loading='eager' alt="world" className="w-full aspect-square lg:block hidden" />
                 </div>
             </main>
         </MaxWidthWrapper>
