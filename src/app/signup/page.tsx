@@ -201,8 +201,8 @@ const Signup = () => {
                 </div>
 
                 {/* SVG for Desktop */}
-                <div className='flex self-end '>
-                    <Image src='/signup.svg' width={100} height={100} alt="how-it-works" className="w-full max-w-[800px] lg:block hidden" />
+                <div className=' self-end w-full hidden lg:flex'>
+                    <Image src='/signup.svg' width={100} loading='eager' priority height={100} alt="how-it-works" className="w-full max-w-[800px] lg:block hidden" />
                 </div>
             </main>
         </MaxWidthWrapper>
