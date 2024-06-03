@@ -98,19 +98,21 @@ export default class ServiceController {
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { description, hourly_price, user_id, service_type_id } = req.body
+      const { description, hourly_price, user_id, service_type_id, city_id, country_id } = req.body
       const serviceExist = await prisma.service.findFirst({ where: { user_id: Number(user_id), service_type_id: Number(service_type_id) } })
       if (serviceExist) return res.status(400).json({ msg: 'Service already exists.' })
       const data = {
         description,
         hourly_price: hourly_price ? Number(hourly_price) : null,
         user_id: Number(user_id),
-        service_type_id: Number(service_type_id)
+        service_type_id: Number(service_type_id),
+        city_id: city_id ? Number(city_id) : 1,
+        country_id: country_id ? Number(country_id) : 1
       }
       const service = await prisma.service.create({
         data
       })
-      if (!service) return res.status(404).json({ msg: 'Service not created' })
+      if (!service) return res.status(404).json({ msg: 'Service not created.' })
       return res.status(200).json(service)
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
@@ -119,7 +121,7 @@ export default class ServiceController {
 
   static async update(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { id, description, hourly_price, user_id, service_type_id, shown, active } = req.body
+      const { id, description, hourly_price, user_id, service_type_id, shown, active, city_id, country_id } = req.body
       const service = await prisma.service.update({
         where: { id: Number(id), user_id: Number(user_id) },
         data: {
@@ -127,10 +129,12 @@ export default class ServiceController {
           hourly_price: Number(hourly_price),
           service_type_id: Number(service_type_id),
           shown,
-          active
+          active,
+          city_id,
+          country_id
         }
       })
-      if (!service) return res.status(404).json({ msg: 'Service not updated' })
+      if (!service) return res.status(404).json({ msg: 'Service not updated.' })
       return res.status(200).json(service)
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
@@ -144,8 +148,25 @@ export default class ServiceController {
         where: { id: Number(id), user_id: Number(user_id) },
         data: { active: false }
       })
-      if (!service) return res.status(404).json({ msg: 'Service not deleted' })
+      if (!service) return res.status(404).json({ msg: 'Service not deleted.' })
       return res.status(200).json(service)
+    } catch (error) {
+      return res.status(500).json({ msg: 'Internal server error.', error })
+    }
+  }
+
+  static async getByCityAndType(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const { city_id, service_type_id } = req.query
+      const where: any = {
+        active: true,
+        shown: true
+      }
+      if (city_id) where.city_id = Number(city_id)
+      if (service_type_id) where.service_type_id = Number(service_type_id)
+      const services = await prisma.service.findMany({ where })
+      if (!services) return res.status(404).json({ msg: 'No services found.' })
+      return res.status(200).json(services)
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
     }

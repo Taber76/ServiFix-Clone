@@ -15,23 +15,24 @@ datasource db {
 
 // Models
 model User {
-  id          Int      @id @default(autoincrement())
-  username    String   @unique
-  password    String
-  name        String
-  surname     String
-  email       String   @unique
-  photo       String?
-  phone       String?
-  description String?
-  personal_id String?
-  rating      Float?
-  role        Role     @default(SUPPLIER)
-  key         String
-  verified    Boolean  @default(false)
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                 Int      @id @default(autoincrement())
+  username           String   @unique
+  password           String
+  name               String
+  surname            String
+  email              String   @unique
+  photo              String?
+  phone              String?
+  description        String?
+  personal_id        String?
+  rating             Float?
+  role               Role     @default(SUPPLIER)
+  key                String
+  password_reset_key String?
+  verified           Boolean  @default(false)
+  active             Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   services       Service[]
   chats_as_user1 Chat[]    @relation("chats_as_user1")
@@ -76,6 +77,10 @@ model Service {
   user            User        @relation(fields: [user_id], references: [id])
   service_type_id Int
   service_type    ServiceType @relation(fields: [service_type_id], references: [id])
+  country_id      Int         @default(1)
+  country         Country     @relation(fields: [country_id], references: [id])
+  city_id         Int         @default(1)
+  city            City        @relation(fields: [city_id], references: [id])
 
   @@map("services")
 }
@@ -105,4 +110,33 @@ model Message {
   chat      Chat @relation(fields: [chat_id], references: [id])
 
   @@map("messages")
+}
+
+model Country {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  services Service[]
+  cities   City[]
+
+  @@map("countries")
+}
+
+model City {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  services   Service[]
+  country_id Int
+  country    Country   @relation(fields: [country_id], references: [id])
+
+  @@map("cities")
+}
+
+model Online {
+  id        Int    @id @default(autoincrement())
+  socket_id String
+  user_id   Int
+
+  @@map("onlines")
 }

@@ -1,17 +1,20 @@
 import { NextApiRequest } from 'next'
+import cookie from 'cookie'
 import AuthHelper from '@/server/helpers/auth.helper'
 
 export default class AuthMiddleware {
 
-
   static checkAuth(req: NextApiRequest, userTypes: string[]) {
-    if (!req.headers.authorization) return { success: false, error: 'Not authorization header.' }
+    if (!req.headers.cookie) return { success: false, error: 'Not cookie on headers.' }
 
-    const token = req.headers.authorization.split(' ')[1]
-    if (!token) return { success: false, error: 'Not token.' }
+    const cookies = cookie.parse(req.headers.cookie)
+    const accessToken = cookies.accessToken
+    if (!accessToken) {
+      return { success: false, error: 'No access token.' }
+    }
 
-    const authResponse = AuthHelper.authenticateUserToken(token, userTypes)
-    if (!authResponse.success) return { success: false, error: 'Invalid token.' }
+    const authResponse = AuthHelper.authenticateUserToken(accessToken, userTypes)
+    if (!authResponse.success) return { success: false, error: 'Invalid access token.' }
 
     return { success: true, user_id: authResponse.data?.user_id }
   }

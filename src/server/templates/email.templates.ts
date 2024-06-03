@@ -15,4 +15,16 @@ export default class EmailTemplates {
 `
   }
 
+  static resetPassword(key: string) {
+    return `
+    <p>To reset your password, use the code below:</p>
+    <p style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: #007bff; text-align: center; text-decoration: none; border-radius: 5px;">
+      ${key}
+    </p>
+    </p>
+    <p>If you did not request a password reset, please ignore this email.</p>
+    `
+  }
+
+
 }
