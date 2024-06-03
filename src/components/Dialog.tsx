@@ -35,11 +35,13 @@ export function DialogModal({
                 </div>
                 <DialogFooter className="flex flex-row justify-evenly items-center gap-4">
                     <Link
+                        onClick={() => setIsOpen(false)}
                         href='/login'
                         className='flex items-center gap-1 outline outline-1 p-2  rounded-md text-black hover:bg-zinc-200 transition-all px-8 text-center'>
                         Log in
                     </Link>
                     <Link
+                        onClick={() => setIsOpen(false)}
                         href='/signup'
                         className='flex items-center gap-1 bg-green-600 p-2 rounded-md text-white hover:bg-green-700 transition-all px-8 text-center '>
                         Sign up
