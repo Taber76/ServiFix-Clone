@@ -95,5 +95,22 @@ export default class ChatController {
     }
   }
 
+  static async socketSaveMessage(user1_id: number, user2_id: number, message: string) {
+    try {
+      const chat_id = await ChatHelper.getChatIdByUserIds(user1_id, user2_id)
+      const newMessage = await prisma.message.create({
+        data: {
+          chat_id: Number(chat_id),
+          sender_id: user1_id,
+          message
+        }
+      })
+      if (!newMessage) return false
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
 
 }

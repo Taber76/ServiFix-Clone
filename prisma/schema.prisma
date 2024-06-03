@@ -77,6 +77,10 @@ model Service {
   user            User        @relation(fields: [user_id], references: [id])
   service_type_id Int
   service_type    ServiceType @relation(fields: [service_type_id], references: [id])
+  country_id      Int         @default(1)
+  country         Country     @relation(fields: [country_id], references: [id])
+  city_id         Int         @default(1)
+  city            City        @relation(fields: [city_id], references: [id])
 
   @@map("services")
 }
@@ -106,4 +110,33 @@ model Message {
   chat      Chat @relation(fields: [chat_id], references: [id])
 
   @@map("messages")
+}
+
+model Country {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  services Service[]
+  cities   City[]
+
+  @@map("countries")
+}
+
+model City {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  services   Service[]
+  country_id Int
+  country    Country   @relation(fields: [country_id], references: [id])
+
+  @@map("cities")
+}
+
+model Online {
+  id        Int    @id @default(autoincrement())
+  socket_id String
+  user_id   Int
+
+  @@map("onlines")
 }
