@@ -41,7 +41,7 @@ export function DialogModal({
                     </Link>
                     <Link
                         href='/signup'
-                        className='flex items-center gap-1 bg-green-600 p-2 rounded-md text-white hover:bg-green-700 transition-all px-8 text-center '>
+                        className='flex items-center gap-1 bg-green-600 p-2 rounded-md text-white hover:bg-green-700 transition-all px-8 text-center pb-2'>
                         Sign up
                     </Link>
                 </DialogFooter>
