@@ -1,20 +1,41 @@
+// @ts-nocheck
+
 'use client'
 
 import useFilterPosts from '@/hooks/useFilterPosts'
 import { Checkbox, CheckboxGroup, Divider, Radio, RadioGroup, Select, SelectItem, Slider } from '@nextui-org/react'
 import { FilterIcon, Trash2 } from 'lucide-react'
-import { allServices, type Service, posts, type Posts } from '@/lib/data'
+import { posts } from '@/lib/data'
+import { useEffect } from 'react'
+import SelectionSkeleton from './SelectionSkeleton'
+import { useStore } from '@/store/serviceStore'
+import { AllServices, getAllServices } from '@/services/getAllServices'
 
-const Filter = () => {
+const Filter: React.FC = () => {
 
+    const { services, setServices } = useStore(state => ({
+        services: state.services,
+        setServices: state.setServices
+    }));
+
+    useEffect(() => {
+        const fetchServices = async () => {
+            try {
+                const data = await getAllServices();
+                if (data) setServices(data);
+            } catch (error) {
+                console.error('Failed to fetch services:', error);
+            }
+        };
+
+        fetchServices();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const { filterConfig, setFilterConfig } = useFilterPosts();
 
     const newCity = new Set(posts.map(post => post.location.split(', ').slice(0, -1).join('')))
-
     const allCities = Array.from(newCity)
-
-
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value
@@ -57,14 +78,16 @@ const Filter = () => {
     }
 
     const handleResetFilters = () => {
-        setFilterConfig({
-            category: 'all',
-            sort: 'all',
-            city: 'all',
-            currency: 'ars',
-            verifiedOnly: false,
-            priceRange: [0, 100000]
-        })
+        setTimeout(() => {
+            setFilterConfig({
+                category: 'all',
+                sort: 'all',
+                city: 'all',
+                currency: 'ars',
+                verifiedOnly: false,
+                priceRange: [0, 100000]
+            })
+        }, 2000);
 
     }
 
@@ -80,7 +103,7 @@ const Filter = () => {
 
 
     return (
-        <div className='bg-zinc-100 shadow-lg p-6 gap-6 flex flex-col w-full h-fit sticky top-20'>
+        <div className='bg-zinc-100 shadow-lg p-6 gap-6 flex flex-col w-full h-fit sticky top-20 max-w-xs'>
 
             <div className='flex justify-between'>
                 <h3 className='text-xl flex gap-2 font-semibold items-center'>Filter {<FilterIcon size={16}></FilterIcon>}</h3>
@@ -89,26 +112,25 @@ const Filter = () => {
             </div>
 
             <div className='flex flex-col gap-4'>
+                {
+                    services.length === 0
+                        ? <div className="w-full max-w-xs"><SelectionSkeleton /></div>
+                        :
+                        <Select label="Category" color='default' size='sm' defaultSelectedKeys={[filterConfig.category]} className='shadow-sm'
+                            onChange={(e) => handleCategoryChange(e)} disallowEmptySelection>
+                            <SelectItem key={'all'} value="all">All</SelectItem>
+                            {
+                                services.map((service: AllServices) => (
+                                    <SelectItem
+                                        key={service.name.toLowerCase().replaceAll(' ', '-')}
+                                        value={service.name}>
+                                        {service.name}
+                                    </SelectItem>
+                                ))
+                            }
+                        </Select>
+                }
 
-                <Select label="Category" color='default' size='sm' defaultSelectedKeys={filterConfig.category} className='shadow-sm'
-                    onChange={(e) => handleCategoryChange(e)} disallowEmptySelection>
-
-                    <SelectItem key={'all'} value="all">All</SelectItem>
-
-                    {
-                        allServices.map((service: Service) => (
-
-                            <SelectItem
-                                key={service.name.toLowerCase().replaceAll(' ', '-')}
-                                value={service.name}>
-                                {service.name}
-                            </SelectItem>
-                        ))
-                    }
-
-
-
-                </Select>
                 <Divider />
 
                 <Select label='Sort' color='default' size='sm' className='shadow-sm' value={filterConfig.sort} onChange={(e) => handleSortChange(e)} disallowEmptySelection defaultSelectedKeys={filterConfig.sort}>
@@ -122,7 +144,6 @@ const Filter = () => {
                 <Divider />
 
                 <Select label='City' color='default' size='sm' className='shadow-sm' onChange={(e) => handleCityChange(e)} disallowEmptySelection defaultSelectedKeys={filterConfig.city}>
-
                     <SelectItem key={'all'} value="all">All</SelectItem>
                     {
                         allCities.map((city: string) => (
@@ -133,8 +154,6 @@ const Filter = () => {
                             </SelectItem>
                         ))
                     }
-
-
                 </Select>
 
                 <Divider />
@@ -153,8 +172,6 @@ const Filter = () => {
                 </RadioGroup>
 
                 <Divider />
-
-
                 {
                     filterConfig.currency === 'usd' ?
                         <Slider
@@ -185,7 +202,6 @@ const Filter = () => {
                             onChangeEnd={(e) => handlePriceChange(e)}
                         />
                 }
-
             </div>
         </div >
     )

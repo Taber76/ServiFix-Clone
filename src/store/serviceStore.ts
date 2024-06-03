@@ -11,7 +11,7 @@ interface FilterConfig {
 }
 
 interface ServiceStore {
-    services: AllServices[];
+    services: AllServices[] | [];
     setServices: (services: AllServices[]) => void;
     filterConfig: FilterConfig;
     setFilterConfig: (filterConfig: Partial<FilterConfig>) => void;
