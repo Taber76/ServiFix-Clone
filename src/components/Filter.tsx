@@ -78,17 +78,14 @@ const Filter: React.FC = () => {
     }
 
     const handleResetFilters = () => {
-        setTimeout(() => {
-            setFilterConfig({
-                category: 'all',
-                sort: 'all',
-                city: 'all',
-                currency: 'ars',
-                verifiedOnly: false,
-                priceRange: [0, 100000]
-            })
-        }, 2000);
-
+        setFilterConfig({
+            category: 'all',
+            sort: 'all',
+            city: 'all',
+            currency: 'all',
+            verifiedOnly: false,
+            priceRange: [0, 100000]
+        })
     }
 
     const handleVerifiedChange = (e: any) => {
