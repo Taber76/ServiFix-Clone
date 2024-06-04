@@ -15,6 +15,7 @@ function NotFound() {
             height={10}
             className="rounded-xl aspect-[3/2] " />
         </div>
+
         <div>
           <Link
             href="/"

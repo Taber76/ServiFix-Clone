@@ -7,7 +7,7 @@ import EmailHelper from '../helpers/email.helper'
 
 export default class AuthController {
 
-  static async register(req: NextApiRequest, res: NextApiResponse) {
+  static async register(req: any, res: NextApiResponse) {
     try {
       if (!AuthHelper.checkRegisterData(req.body)) {
         return res.status(400).json({ msg: 'Invalid data.' })
@@ -22,6 +22,10 @@ export default class AuthController {
         }
       })
       if (user) return res.status(400).json({ msg: 'User already exists.' })
+
+      if (req.files) {
+        console.log(req.files)
+      }
 
       const hashPassword = await bcrypt.hash(req.body.password, process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 10)
       const key = AuthHelper.generateKey()
