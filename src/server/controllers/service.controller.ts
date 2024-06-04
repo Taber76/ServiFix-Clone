@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/server/lib/prisma'
-import UserHelper from '../helpers/user.helper'
+import UploadHelper from '../helpers/upload.helper'
 import sharp from 'sharp'
 
 export default class ServiceController {
@@ -187,7 +187,8 @@ export default class ServiceController {
         .jpeg({ quality: 80 })
         .toBuffer();
 
-      const imageUrl = await UserHelper.uploadImage(processedImageBuffer)
+      const imageUrl = await UploadHelper.uploadImage(processedImageBuffer)
+      if (!imageUrl) return res.status(400).json({ msg: 'Image not uploaded.' })
       await prisma.service.update({
         where: {
           id: Number(service_id),
