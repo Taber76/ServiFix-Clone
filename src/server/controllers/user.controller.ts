@@ -70,7 +70,7 @@ export default class UserController {
       const file = req.file
 
       const processedImageBuffer = await sharp(file.buffer)
-        .resize(400) // Redimensionar la imagen a un ancho máximo de 800px
+        .resize(400)
         .toFormat('jpeg')
         .jpeg({ quality: 80 })
         .toBuffer();

@@ -1,6 +1,6 @@
 # SERVIFIX
 ## Descripción del Proyecto
-La plataforma tiene como objetivo conectar a los clientes que buscan servicios profesionales con los proveedores de servicios que ofrecen dichos servicios. Los usuarios pueden registrarse en la plataforma y crear un perfil tanto para ofrecer servicios como para contratar.
+La plataforma tiene como objetivo conectar a los clientes que buscan servicios profesionales con los proveedores que los ofrecen. Los usuarios pueden registrarse en la plataforma y crear un perfil tanto para ofrecer servicios como para contratar.
 ## Tech Stack
 [![My Skills](https://skillicons.dev/icons?i=nextjs,ts,postgres,prisma,vercel,git,github,postman,vscode&perline=9)](https://skillicons.dev)
 - NextJS
