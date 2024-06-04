@@ -38,6 +38,7 @@ model User {
   chats_as_user1 Chat[]    @relation("chats_as_user1")
   chats_as_user2 Chat[]    @relation("chats_as_user2")
   messages       Message[]
+  reviews        Review[]
 
   @@map("users")
 }
@@ -66,8 +67,9 @@ model Service {
   description  String
   hourly_price Float?
   rating       Float?
-  reviews      Float?
+  num_reviews  Float?
   times_hired  Float?
+  url_image    String?
   shown        Boolean  @default(true)
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
@@ -81,8 +83,26 @@ model Service {
   country         Country     @relation(fields: [country_id], references: [id])
   city_id         Int         @default(1)
   city            City        @relation(fields: [city_id], references: [id])
+  reviews         Review[]
 
   @@map("services")
+}
+
+model Review {
+  id      Int     @id @default(autoincrement())
+  rating  Float
+  comment String
+  active  Boolean @default(true)
+
+  user_id    Int
+  user       User    @relation(fields: [user_id], references: [id])
+  service_id Int
+  service    Service @relation(fields: [service_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
 }
 
 model Chat {
@@ -133,6 +153,7 @@ model City {
   @@map("cities")
 }
 
+// for websocket
 model Online {
   id        Int    @id @default(autoincrement())
   socket_id String

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/server/lib/prisma'
-import UserHelper from '../helpers/user.helper'
+import UploadHelper from '../helpers/upload.helper'
 import sharp from 'sharp'
 
 export default class UserController {
@@ -70,12 +70,13 @@ export default class UserController {
       const file = req.file
 
       const processedImageBuffer = await sharp(file.buffer)
-        .resize(400) // Redimensionar la imagen a un ancho máximo de 800px
+        .resize(400)
         .toFormat('jpeg')
         .jpeg({ quality: 80 })
         .toBuffer();
 
-      const imageUrl = await UserHelper.uploadImage(processedImageBuffer)
+      const imageUrl = await UploadHelper.uploadImage(processedImageBuffer)
+      if (!imageUrl) return res.status(400).json({ msg: 'Image not uploaded.' })
       await prisma.user.update({ where: { id: user_id }, data: { photo: imageUrl } })
 
 
