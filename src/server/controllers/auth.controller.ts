@@ -90,7 +90,7 @@ export default class AuthController {
       const accessToken = AuthHelper.generateToken(userDB)
       return res
         .setHeader('Set-Cookie', `accessToken=${accessToken}; Path=/; SameSite=Lax; Secure; Max-Age=${process.env.JWT_EXPIRES}`)
-        .status(202).json({ msg: 'Login successful.' })
+        .status(202).json({ msg: 'Login successful.', user: { ...userDB, password: undefined, key: undefined } })
 
     } catch (error) {
       console.log(error)
