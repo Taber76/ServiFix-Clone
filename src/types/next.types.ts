@@ -1,5 +1,5 @@
 import { Server as NetServer, Socket } from "net";
-import { NextApiResponse } from "next";
+import { NextApiResponse, NextApiRequest } from "next";
 import { Server as SocketIOServer } from "socket.io";
 
 export type NextApiResponseServerIO = NextApiResponse & {
@@ -9,3 +9,4 @@ export type NextApiResponseServerIO = NextApiResponse & {
     };
   };
 };
+
