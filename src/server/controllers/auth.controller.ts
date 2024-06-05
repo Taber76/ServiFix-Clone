@@ -27,7 +27,7 @@ export default class AuthController {
         console.log(req.files)
       }
 
-      const hashPassword = await bcrypt.hash(req.body.password, process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 10)
+      const hashPassword = await bcrypt.hash(req.body.password, process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 8)
       const key = AuthHelper.generateKey()
       const data = {
         username: req.body.username,
@@ -117,7 +117,8 @@ export default class AuthController {
         where: { id: user.id },
         data: { password_reset_key: passwordRestetKey }
       })
-      return res.status(202).json({ msg: 'Password reset email sent.' })
+      const emailHash = await bcrypt.hash(email, process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 8)
+      return res.status(202).json({ msg: 'Password reset email sent.', emailHash })
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
     }
