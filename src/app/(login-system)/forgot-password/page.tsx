@@ -51,8 +51,8 @@ const ForgotPassword = () => {
 
             if (data.status === 202) {
                 toast({
-                    title: 'Success',
-                    description: `${data.data.msg} ✅`,
+                    title: 'Success ✅',
+                    description: `${data.data.msg}`,
                     variant: 'default'
                 })
                 router.push('/reset-password')
@@ -61,8 +61,8 @@ const ForgotPassword = () => {
         } catch (error: any) {
             console.log(error);
             toast({
-                title: 'Error',
-                description: `${error.message}`,
+                title: 'Error ⚠️',
+                description: `${error.response.data.msg}`,
                 variant: 'destructive'
             })
         } finally {
