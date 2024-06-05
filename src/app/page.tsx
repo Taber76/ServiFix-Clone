@@ -102,9 +102,7 @@ export default function Home() {
       <section id="about" className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-100">
         <MaxWidthWrapper>
           <div className="flex gap-12 justify-between items-center flex-col lg:flex-row">
-
-
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 lg:w-1/2">
               <h2 className="text-5xl mb-6 font-bold text-center">How does it work?</h2>
               <div className="flex gap-4 items-center">
                 <span className="rounded-full border-2 border-green-600 p-4 flex items-center justify-center border-dashed size-6">1</span>
@@ -137,10 +135,10 @@ export default function Home() {
                   <p className="font-light">Enjoy seamless communication and transaction management within our platform. Chat directly with your Tasker to coordinate details, make secure payments, leave a tip for exceptional service, and provide a review—all from one convenient location.</p>
                 </div>
               </div>
-
             </div>
-
-            <Image src='/how-it-works.svg' width={100} height={100} alt="how-it-works" className="w-4/5 aspect-[4/5] md:w-1/2 md:aspect-square" />
+            <div className="w-4/5 lg:w-1/2">
+              <Image src='/how-it-works.svg' width={100} height={100} alt="how-it-works" className="w-full aspect-square" loading="lazy" />
+            </div>
           </div>
         </MaxWidthWrapper>
       </section>
@@ -148,10 +146,14 @@ export default function Home() {
       {/* Become a tasker */}
       <section id="join-us" className=" w-full py-16 flex flex-col justify-center items-center bg-zinc-50">
         <MaxWidthWrapper>
-          <div className="flex gap-12 px-6 justify-between items-center flex-col-reverse lg:flex-row">
-            <Image src='/become-tasker.svg' width={400} height={100} alt="how-it-works" className="w-4/5 aspect-[4/5] md:w-[400px] md:aspect-square" />
+          <div className="flex gap-12 justify-between items-center flex-col-reverse lg:flex-row">
 
-            <div className="flex flex-col gap-4">
+            <div className="w-4/5 lg:w-1/2">
+              <Image src='/become-tasker.svg' width={400} height={100} alt="how-it-works"
+                className="w-full aspect-square" loading="lazy" />
+            </div>
+
+            <div className="flex flex-col gap-4 w-full lg:w-1/2">
               <div className="pb-6 text-center">
                 <h2 className="text-5xl font-bold text-center">Become a Tasker</h2>
                 <p className="font-light">Join the ServiFix Community and Start Earning!</p>
