@@ -1,40 +1,31 @@
-## API DOC
+# SERVIFIX
+## Descripción del Proyecto
+La plataforma tiene como objetivo conectar a los clientes que buscan servicios profesionales con los proveedores que los ofrecen. Los usuarios pueden registrarse en la plataforma y crear un perfil tanto para ofrecer servicios como para contratar.
+## Tech Stack
+[![My Skills](https://skillicons.dev/icons?i=nextjs,ts,postgres,prisma,vercel,git,github,postman,vscode&perline=9)](https://skillicons.dev)
+- NextJS
+- Typescript
+- PostgreSQL
+
+## Funcionalidad
+1. Registro y Autenticación de Usuarios:
+	* Los usuarios pueden registrarse y autenticarse en la plataforma.
+	* Validación de email y recuperación de contraseñas.
+2. Perfil de Usuarios:
+	* Creación y gestión de perfiles por parte de los usuarios.
+	* Detalle de servicios ofrecidos, número de contacto, y otros detalles relevantes.
+3. Búsqueda y Filtrado:
+	* Búsqueda avanzada con filtros por tipo de servicio, ubicación y calificaciones.
+4. Calificaciones y Reseñas:
+	* Los usuarios pueden calificar y dejar reseñas sobre los servicios recibidos, fomentando la confianza y transparencia.
+5. Sistema de Mensajería:
+	* Comunicación directa entre usuarios para concretar detalles del servicio.
+6. Notificaciones:
+	* Notificaciones por correo electrónico y en la plataforma sobre actualizaciones de servicios, mensajes nuevos, y más.
+
+
+### DEPLOY
+https://servi-fix-clone.vercel.app/
+
+### API DOC
 https://documenter.getpostman.com/view/24685479/2sA3Qnhtxc
-
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

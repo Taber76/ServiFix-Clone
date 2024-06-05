@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/server/lib/prisma'
+import UploadHelper from '../helpers/upload.helper'
+import sharp from 'sharp'
 
 export default class ServiceController {
 
@@ -170,6 +172,39 @@ export default class ServiceController {
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
     }
+  }
+
+  static async uploadImage(req: any, res: any, user_id: number) {
+    try {
+      if (!req.file) return res.status(400).json({ msg: 'No image uploaded.' })
+      const { service_id } = req.query
+
+      const file = req.file
+
+      const processedImageBuffer = await sharp(file.buffer)
+        .resize(400)
+        .toFormat('jpeg')
+        .jpeg({ quality: 80 })
+        .toBuffer();
+
+      const imageUrl = await UploadHelper.uploadImage(processedImageBuffer)
+      if (!imageUrl) return res.status(400).json({ msg: 'Image not uploaded.' })
+      await prisma.service.update({
+        where: {
+          id: Number(service_id),
+          user_id: user_id
+        },
+        data: {
+          url_image: imageUrl
+        }
+      })
+
+
+      return res.status(200).json({ msg: 'Image uploaded.' })
+    } catch (error) {
+      return res.status(500).json({ msg: 'Internal server error.', error })
+    }
+
   }
 
 }

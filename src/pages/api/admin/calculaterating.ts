@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import AuthController from '@/server/controllers/auth.controller'
+import AdminController from '@/server/controllers/admin.controller';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
+  if (req.method !== 'GET') {
     return res.status(405).json({ msg: 'Method not allowed' });
   }
-
-  return AuthController.register(req, res);
+  return AdminController.calculateRating(req, res);
 }

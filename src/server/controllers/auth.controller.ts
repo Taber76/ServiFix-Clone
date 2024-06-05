@@ -7,7 +7,7 @@ import EmailHelper from '../helpers/email.helper'
 
 export default class AuthController {
 
-  static async register(req: NextApiRequest, res: NextApiResponse) {
+  static async register(req: any, res: NextApiResponse) {
     try {
       if (!AuthHelper.checkRegisterData(req.body)) {
         return res.status(400).json({ msg: 'Invalid data.' })
@@ -23,7 +23,11 @@ export default class AuthController {
       })
       if (user) return res.status(400).json({ msg: 'User already exists.' })
 
-      const hashPassword = await bcrypt.hash(req.body.password, process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 10)
+      if (req.files) {
+        console.log(req.files)
+      }
+
+      const hashPassword = await bcrypt.hash(req.body.password, process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 8)
       const key = AuthHelper.generateKey()
       const data = {
         username: req.body.username,
@@ -90,7 +94,7 @@ export default class AuthController {
       const accessToken = AuthHelper.generateToken(userDB)
       return res
         .setHeader('Set-Cookie', `accessToken=${accessToken}; Path=/; SameSite=Lax; Secure; Max-Age=${process.env.JWT_EXPIRES}`)
-        .status(202).json({ msg: 'Login successful.' })
+        .status(202).json({ msg: 'Login successful.', user: { ...userDB, password: undefined, key: undefined } })
 
     } catch (error) {
       console.log(error)
@@ -113,7 +117,8 @@ export default class AuthController {
         where: { id: user.id },
         data: { password_reset_key: passwordRestetKey }
       })
-      return res.status(202).json({ msg: 'Password reset email sent.' })
+      const emailHash = await bcrypt.hash(email, process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 8)
+      return res.status(202).json({ msg: 'Password reset email sent.', emailHash })
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
     }
