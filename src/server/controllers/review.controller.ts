@@ -38,13 +38,14 @@ export default class ReviewController {
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { user_id, service_id, rating, comment } = req.body
+      const { user_id, service_id, username, rating, comment } = req.body
       const review = await prisma.review.create({
         data: {
           user_id: Number(user_id),
           service_id: Number(service_id),
           rating: Number(rating),
-          comment
+          comment,
+          by: username ? username : "Anonymous"
         }
       })
       if (!review) return res.status(404).json({ msg: 'Review not created.' })
