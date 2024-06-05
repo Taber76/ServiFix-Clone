@@ -8,88 +8,98 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import io, { Socket } from 'socket.io-client';
-
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Dispatch, SetStateAction } from "react";
 import Cookies from 'js-cookie';
 
-export function ChatDialogModal({ isOpen, setIsOpen }:
-    { isOpen: boolean, setIsOpen: Dispatch<SetStateAction<boolean>> }) {
+export function ChatDialogModal({ isOpen, setIsOpen, recipientId }:
+    { isOpen: boolean, setIsOpen: Dispatch<SetStateAction<boolean>>, recipientId: number }) {
 
     const [message, setMessage] = useState('')
-    const [messages, setMessages] = useState([''])
+    const [messages, setMessages] = useState<any[]>([]);
     const socketRef = useRef<Socket | null>(null);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        // connect to socket
+        const fetchChatHistory = async () => {
+            try {
+                const response = await axios.get(`/api/chat/getbyusers?user2_id=${recipientId}`);
+                setMessages(response.data.messages);
+            } catch (error) {
+                console.error("Error fetching chat history:", error);
+            }
+        };
+        if (isOpen) fetchChatHistory()
+
         const socketInit = async () => {
-            await axios.get('/api/socket')
+            await axios.get('/api/socket');
             socketRef.current = io();
-
-            // on connect authenticate
             socketRef.current.emit('authenticate', Cookies.get('accessToken'));
+            socketRef.current.on('message', (msg, recipient_id) => {
+                if (recipient_id === recipientId)
+                    setMessages((prev) => [...prev, { message: msg, sender_id: recipientId }]);
+            });
+        };
 
-            // on message
-            socketRef.current.on('message', (msg, senderId) => {
-                setMessages((prev) => [...prev, `Pirulo: ${msg}`]);
-            })
-        }
+        socketInit();
 
-        // falta cargar mensajes del chat
-        socketInit()
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+            }
+        };
+    }, [isOpen, recipientId]);
 
-    }, [])
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
 
     const handleSendMessage = () => {
         if (socketRef.current && message.trim()) {
-            const [recipientId, userMessage] = message.trim().split('**');
-            socketRef.current.emit('message', userMessage, parseInt(recipientId));
-            setMessages((prev) => [...prev, `Yo: ${userMessage}`]);
+            socketRef.current.emit('message', message, recipientId);
+            setMessages((prev) => [...prev, { message, sender_id: 0 }]);
             setMessage('');
         }
     };
 
-
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] bg-blue-800/50 border border-green-600">
+
                 <DialogHeader>
                     <DialogTitle>Chat</DialogTitle>
                     <DialogDescription>
-                        Chat con pirulo.{" "}
-                        ultimo mensaje...
+                        Chat con el usuario.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="max-h-40 overflow-y-auto p-2 border border-gray-300 rounded">
+
+                <div className="grid gap-1 py-1">
+                    <div className="max-h-80 overflow-y-auto p-2 border border-green-600 rounded bg-white">
                         {messages.map((msg, index) => (
-                            <div key={index} className="p-2">
-                                {msg}
+                            <div key={index} className={`p-2 mb-1 rounded ${msg.sender_id !== recipientId ? 'bg-green-200 text-right ml-5' : 'bg-gray-200 self-end text-left mr-5'}`}>
+                                {msg.message}
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
-                    <input
-                        type="text"
+                    <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="p-2 border border-gray-300 rounded"
+                        className="p-2 border border-gray-300 rounded resize-none min-h-[50px] max-h-[150px] w-full overflow-y-auto"
                         placeholder="Type your message..."
                     />
+                </div>
+
+                <DialogFooter className="flex flex-row justify-evenly items-center gap-1">
                     <Button
                         variant="default"
                         color="access"
                         onClick={handleSendMessage}>
                         Send
                     </Button>
-                </div>
-                <DialogFooter className="flex flex-row justify-evenly items-center gap-4">
-                    <Button
-                        variant="outline"
-                        onClick={() => setIsOpen(false)}>
-                        CLOSE
-                    </Button>
                 </DialogFooter>
+
             </DialogContent>
         </Dialog>
     );

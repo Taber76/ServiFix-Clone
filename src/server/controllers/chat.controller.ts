@@ -45,6 +45,44 @@ export default class ChatController {
     }
   }
 
+  static async getByUsersId(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      let messages: any[] = []
+      const { user1_id, user2_id } = req.query
+      let chat = await prisma.chat.findFirst({
+        where: {
+          OR: [
+            { user1_id: Number(user1_id), user2_id: Number(user2_id) },
+            { user1_id: Number(user2_id), user2_id: Number(user1_id) }
+          ]
+        },
+        select: {
+          id: true
+        }
+      })
+      if (!chat) {
+        chat = await prisma.chat.create({
+          data: {
+            user1_id: Number(user1_id),
+            user2_id: Number(user2_id)
+          }
+        })
+      } else {
+        messages = await prisma.message.findMany({
+          where: {
+            chat_id: chat.id
+          },
+          orderBy: {
+            timestamp: 'asc'
+          }
+        })
+      }
+      return res.status(200).json({ chat_id: chat.id, messages })
+    } catch (error) {
+      return res.status(500).json({ error })
+    }
+  }
+
   static async getMessagesByChatId(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { chat_id, number_of_messages, user_id } = req.query
