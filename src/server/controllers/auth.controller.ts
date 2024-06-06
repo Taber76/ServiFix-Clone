@@ -112,13 +112,14 @@ export default class AuthController {
 
       const passwordRestetKey = AuthHelper.generateKey()
       const sendEmail = await EmailHelper.sendResetPasswordEmail(email, passwordRestetKey)
-      if (!sendEmail.success) return res.status(500).json({ msg: 'Dont send verification email, contact support.' })
+      if (!sendEmail.success) return res.status(500).json({ msg: 'Verification email was not sent, please contact support.' })
       await prisma.user.update({
         where: { id: user.id },
         data: { password_reset_key: passwordRestetKey }
       })
+
       const emailToken = AuthHelper.generateToken(user.email)
-      return res.status(202).json({ msg: 'Password reset email sent.', emailToken })
+      return res.status(202).json({ msg: 'Verification code was sent to your email, please check it.', emailToken })
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
     }

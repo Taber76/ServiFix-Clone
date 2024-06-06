@@ -54,7 +54,7 @@ const Login = () => {
             <main className='flex w-full  flex-row-reverse items-center justify-center lg:justify-between lg:gap-24'>
                 {/* Login form */}
                 <div className="flex w-full md:w-1/2 lg:w-full flex-col items-center justify-center h-full">
-                    <div className="w-full md:min-w-96 max-w-2xl bg-white rounded-lg shadow-md p-6">
+                    <div className="w-full md:min-w-96 max-w-2xl bg-white rounded-lg md:shadow-md p-6">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Login</h2>
                         <form
                             className="flex flex-col"

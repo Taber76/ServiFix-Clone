@@ -7,7 +7,7 @@ export interface AllServices {
     updatedAt: Date;
 }
 
-const URL = process.env.NODE_ENV === 'production' ? `${process.env.DEPLOY_URL}/api/servicetype/getall` : 'http://localhost:3000/api/servicetype/getall';
+const URL = process.env.NODE_ENV === 'production' ? `https://servi-fix-clone.vercel.app/api/servicetype/getall` : 'http://localhost:3000/api/servicetype/getall';
 
 export const getAllServices = async (): Promise<AllServices[] | undefined> => {
     try {
