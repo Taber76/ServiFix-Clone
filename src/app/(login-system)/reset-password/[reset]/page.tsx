@@ -5,17 +5,16 @@ import { Button } from '@nextui-org/react'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import React, { FormEvent, useRef, useState } from 'react'
-import bcrypt from 'bcrypt'
 import { useToast } from '@/components/ui/use-toast'
+import axios from 'axios'
 
 
 const ResetPassword = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [showPasswordInput, setShowPasswordInput] = useState(false)
-    const flag = useRef(1)
-    const emailHash = useParams()?.reset
+    const isFirstTime = useRef(true)
+    const emailToken = useParams()?.reset
     const { toast } = useToast()
-
 
     const CODE_REGEX = /^[0-9]{6}$/
     const handleSubmit = async (e: FormEvent) => {
@@ -39,17 +38,19 @@ const ResetPassword = () => {
 
         setShowPasswordInput(true)
 
-        if ((!passwordInput?.value || !confirmPasswordInput?.value) && flag.current === 0) {
+        if (isFirstTime.current) {
+            return isFirstTime.current = false
+        }
+
+        if (!passwordInput?.value || !confirmPasswordInput?.value) {
             toast({
                 title: 'Please enter a password',
                 description: 'Please, do not leave the password fields empty',
                 variant: 'destructive',
             })
-            passwordInput.focus()
+            passwordInput?.focus()
             return
         }
-
-        flag.current = 0
 
         if (passwordInput?.value !== confirmPasswordInput?.value) {
             toast({
@@ -60,7 +61,7 @@ const ResetPassword = () => {
             return
         }
 
-        if (passwordInput.value.length < 8) {
+        if (passwordInput?.value?.length < 8) {
             toast({
                 title: 'Password too short',
                 description: 'Password must be at least 8 characters long',
@@ -69,18 +70,33 @@ const ResetPassword = () => {
             return
         }
 
-        if (passwordInput.value !== confirmPasswordInput.value) {
-            passwordInput.value = ''
-            confirmPasswordInput.value = ''
-            passwordInput.focus()
-            throw new Error('Passwords do not match, please try again');
-        }
-
         try {
+            setIsLoading(true)
+            const data = await axios.post('/api/auth/resetpassword', {
+                emailToken,
+                key: code,
+                password: passwordInput.value
+            })
+
+            if (data.status === 202) {
+                toast({
+                    title: 'Password changed successfully ✅',
+                    description: `${data.data.msg}`,
+                    variant: 'default'
+                })
+            }
 
         } catch (error) {
-
+            console.log(error);
+            toast({
+                title: 'Error ⚠️',
+                description: `${error}`,
+                variant: 'destructive'
+            })
+        } finally {
+            setIsLoading(false)
         }
+
     }
 
     return (
