@@ -38,13 +38,21 @@ export default class ReviewController {
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { user_id, service_id, rating, comment } = req.body
+      const { user_id, service_id, username, rating, comment } = req.body
+      const previousReview = await prisma.review.findFirst({
+        where: {
+          user_id: Number(user_id),
+          service_id: Number(service_id)
+        }
+      })
+      if (previousReview) return res.status(400).json({ msg: 'Review already exists.' })
       const review = await prisma.review.create({
         data: {
           user_id: Number(user_id),
           service_id: Number(service_id),
           rating: Number(rating),
-          comment
+          comment,
+          by: username ? username : "Anonymous"
         }
       })
       if (!review) return res.status(404).json({ msg: 'Review not created.' })

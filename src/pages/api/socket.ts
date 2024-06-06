@@ -43,7 +43,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponseServerI
         if (!autenticated) return
         const recipient = await prisma.online.findFirst({ where: { user_id: recipientId } })
         if (recipient) {
-          io.to(recipient.socket_id).emit('message', msg, socket.id);
+          io.to(recipient.socket_id).emit('message', msg, user_id);
         }
         await ChatController.socketSaveMessage(Number(user_id), Number(recipientId), msg)
       })

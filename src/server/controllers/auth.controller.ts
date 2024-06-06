@@ -117,8 +117,9 @@ export default class AuthController {
         where: { id: user.id },
         data: { password_reset_key: passwordRestetKey }
       })
-      const emailHash = await bcrypt.hash(email, process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 8)
-      return res.status(202).json({ msg: 'Verification code was sent to your email, please check it.', emailHash })
+
+      const emailToken = AuthHelper.generateToken(user.email)
+      return res.status(202).json({ msg: 'Verification code was sent to your email, please check it.', emailToken })
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
     }
