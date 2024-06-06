@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/server/lib/prisma'
+import ReviewHelper from '../helpers/review.helper'
 
 export default class ReviewController {
-
 
   static async getByServiceId(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -39,6 +39,8 @@ export default class ReviewController {
   static async create(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { user_id, service_id, username, rating, comment } = req.body
+      const checkReview = await ReviewHelper.checkReview(comment)
+      if (!checkReview) return res.status(403).json({ msg: 'You review conntains inappropriate content, or could not be reviewed.' })
       const previousReview = await prisma.review.findFirst({
         where: {
           user_id: Number(user_id),
