@@ -44,12 +44,9 @@ const ForgotPassword = () => {
             return
         }
 
-
         try {
             setIsLoading(true)
             const data = await axios.post('/api/auth/forgotpassword', user)
-
-            console.log(data)
 
             if (data.status === 202) {
                 toast({
@@ -57,7 +54,7 @@ const ForgotPassword = () => {
                     description: `${data.data.msg}`,
                     variant: 'default'
                 })
-                router.push(`/reset-password/${data.data.emailHash}`)
+                router.push(`/reset-password/${data.data.emailToken}`)
             }
 
         } catch (error: any) {
