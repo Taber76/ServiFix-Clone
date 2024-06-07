@@ -3,7 +3,7 @@
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import { Button } from '@nextui-org/react'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { FormEvent, useRef, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import axios from 'axios'
@@ -15,6 +15,7 @@ const ResetPassword = () => {
     const isFirstTime = useRef(true)
     const emailToken = useParams()?.reset
     const { toast } = useToast()
+    const router = useRouter()
 
     const CODE_REGEX = /^[0-9]{6}$/
     const handleSubmit = async (e: FormEvent) => {
@@ -84,16 +85,17 @@ const ResetPassword = () => {
                     description: `${data.data.msg}`,
                     variant: 'default'
                 })
+                router.push('/login')
             }
 
         } catch (error: any) {
-            console.log(error.response);
-            if (error.response?.data.msg) {
+            if (error?.response?.data?.msg) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',
                     description: `${error.response.data.msg}`,
                 })
+                return
             }
             toast({
                 variant: 'destructive',

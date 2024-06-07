@@ -37,10 +37,9 @@ const Login = () => {
             }
 
         } catch (error: any) {
-            console.log(error);
             toast({
                 title: 'Error',
-                description: `${error.message}`,
+                description: `${error.response.data.msg}`,
                 variant: 'destructive'
             })
         } finally {

@@ -58,7 +58,6 @@ const ForgotPassword = () => {
             }
 
         } catch (error: any) {
-            console.log(error);
             toast({
                 title: 'Error ⚠️',
                 description: `${error.response.data.msg}`,
