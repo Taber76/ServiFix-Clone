@@ -35,7 +35,7 @@ export default function WordRotate({
 
     return (
         <div className="overflow-hidden py-2">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
                 <motion.h1
                     key={words[index]}
                     className={cn(className)}
