@@ -54,16 +54,16 @@ const Navbar = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleLoginClick = (e: any) => {
-        e.preventDefault()
-        isLoggedIn
-            ? setIsModalOpen(false)
-            : setIsModalOpen(true)
+    // const handleLoginClick = (e: any) => {
+    //     e.preventDefault()
+    //     isLoggedIn
+    //         ? setIsModalOpen(false)
+    //         : setIsModalOpen(true)
 
-        if (isLoggedIn) {
-            router.push('/services')
-        }
-    }
+    //     if (isLoggedIn) {
+    //         router.push('/services')
+    //     }
+    // }
 
     const menuItemsLogged = [
         "Profile",
@@ -97,21 +97,27 @@ const Navbar = () => {
 
                         {/* desktop navigation */}
                         <div className='h-full hidden md:flex items-center space-x-4'>
+                            {
+                                pathname === '/' ? (
+                                    <>
+                                        <Link
+                                            href='#about'
+                                            className="hover:bg-zinc-200 transition-all p-2 rounded-md"
+                                        >
+                                            About
+                                        </Link>
+                                        <Link
+                                            href='#join-us'
+                                            className="hover:bg-zinc-200 transition-all p-2 rounded-md"
+                                        >
+                                            Join us
+                                        </Link>
+                                    </>
+                                ) : null
+                            }
+
                             <Link
-                                href='#about'
-                                className="hover:bg-zinc-200 transition-all p-2 rounded-md"
-                            >
-                                About
-                            </Link>
-                            <Link
-                                href='#join-us'
-                                className="hover:bg-zinc-200 transition-all p-2 rounded-md"
-                            >
-                                Join us
-                            </Link>
-                            <Link
-                                href='#'
-                                onClick={handleLoginClick}
+                                href='/services'
                                 className="hover:bg-zinc-200 transition-all p-2 rounded-md">
                                 Services
                             </Link>
