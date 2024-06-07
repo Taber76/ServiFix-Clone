@@ -32,7 +32,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/ServiceCard.tsx"
+    "src/components/ServiceCard.tsx",
+    "src/components/ChatDialog.tsx.bak"
   ],
   "exclude": [
     "node_modules"
