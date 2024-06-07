@@ -146,7 +146,7 @@ const Filter: React.FC = () => {
                     {
                         allCities.map((city) => (
                             <SelectItem
-                                key={city.id}
+                                key={city.name}
                                 value={city.name}>
                                 {city.name}
                             </SelectItem>
