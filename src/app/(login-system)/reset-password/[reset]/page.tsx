@@ -86,12 +86,19 @@ const ResetPassword = () => {
                 })
             }
 
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            console.log(error.response);
+            if (error.response?.data.msg) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: `${error.response.data.msg}`,
+                })
+            }
             toast({
-                title: 'Error ⚠️',
-                description: `${error}`,
-                variant: 'destructive'
+                variant: 'destructive',
+                title: 'Error',
+                description: `${error.message}`,
             })
         } finally {
             setIsLoading(false)

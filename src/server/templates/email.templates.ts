@@ -1,4 +1,4 @@
-const url = process.env.NODE_ENV === 'production' ? 'https://c18-21-ft-node-react.onrender.com' : 'http://localhost:3000';
+const url = process.env.NODE_ENV === 'production' ? 'https://servi-fix-clone.vercel.app' : 'http://localhost:3000';
 
 export default class EmailTemplates {
 
