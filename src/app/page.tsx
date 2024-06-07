@@ -67,7 +67,7 @@ export default function Home() {
               <Select />
             </div>
 
-            <Image src={'/main.jpg'} alt="Builders" width={1024} height={10} className="rounded-xl aspect-[3/2] shadow-lg" />
+            <Image src={'/main.jpg'} alt="Builders" width={1024} priority height={10} className="rounded-xl object-cover aspect-[3/2] shadow-lg" />
           </div>
         </MaxWidthWrapper >
       </section>

@@ -92,7 +92,6 @@ const Signup = () => {
                 router.push('/services')
             }
         } catch (error: any) {
-            console.log(error.message);
 
             if (error.response?.data.msg) {
                 toast({
@@ -100,6 +99,7 @@ const Signup = () => {
                     title: 'Error',
                     description: `${error.response.data.msg}`,
                 })
+                return
             }
             toast({
                 variant: 'destructive',
