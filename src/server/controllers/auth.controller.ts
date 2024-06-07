@@ -118,7 +118,7 @@ export default class AuthController {
         data: { password_reset_key: passwordRestetKey }
       })
 
-      const emailToken = AuthHelper.generateToken(user.email)
+      const emailToken = AuthHelper.generateToken({ email: user.email })
       return res.status(202).json({ msg: 'Verification code was sent to your email, please check it.', emailToken })
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
@@ -131,8 +131,8 @@ export default class AuthController {
       const { emailToken, key, password } = req.body
       if (!emailToken || !key || !password) return res.status(400).json({ msg: 'Invalid data.' })
 
-      const email = AuthHelper.decodeToken(emailToken) as string
-      const user = await prisma.user.findUnique({ where: { email } })
+      const decodedToken: any = AuthHelper.decodeToken(emailToken)
+      const user = await prisma.user.findUnique({ where: { email: decodedToken.email } })
       if (!user) return res.status(404).json({ msg: 'User not found.' })
       if (user.password_reset_key !== key) return res.status(403).json({ msg: 'Invalid key.' })
 
@@ -143,7 +143,7 @@ export default class AuthController {
       })
       return res.status(202).json({ msg: 'Password reset successful.' })
     } catch (error) {
-      return res.status(500).json({ msg: 'Internal server error, user not logged in.', error })
+      return res.status(500).json({ msg: 'Internal server error.', error })
     }
   }
 
