@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": "Not selected"
+  },
+  {
+    "id": 2,
+    "name": "Abuja"
+  },
+  {
+    "id": 3,
+    "name": "Kano"
+  },
+  {
+    "id": 4,
+    "name": "Ibadan"
+  },
+  {
+    "id": 5,
+    "name": "Enugu"
+  },
+  {
+    "id": 6,
+    "name": "Owerri"
+  },
+  {
+    "id": 7,
+    "name": "Kaduna"
+  },
+  {
+    "id": 8,
+    "name": "Jos"
+  },
+  {
+    "id": 9,
+    "name": "Katsina"
+  },
+  {
+    "id": 10,
+    "name": "Ilorin"
+  },
+  {
+    "id": 11,
+    "name": "Benin City"
+  },
+  {
+    "id": 12,
+    "name": "Lagos"
+  },
+  {
+    "id": 13,
+    "name": "Port Harcourt"
+  },
+  {
+    "id": 14,
+    "name": "Sokoto"
+  }
+]

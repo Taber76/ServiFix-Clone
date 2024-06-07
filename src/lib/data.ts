@@ -1,4 +1,8 @@
-export const allServices = [
+import servicesTypes from '@/../public/data/servicetypes.json';
+
+export const allServices = servicesTypes
+
+export const allServicesOLD = [
     {
         "id": 1,
         "name": "Electrician",

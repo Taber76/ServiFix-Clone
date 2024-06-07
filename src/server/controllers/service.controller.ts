@@ -5,6 +5,20 @@ import sharp from 'sharp'
 
 export default class ServiceController {
 
+  static async getAll(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const services = await prisma.service.findMany({
+        where: {
+          active: true
+        }
+      })
+      if (!services) return res.status(404).json({ msg: 'No services found' })
+      return res.status(200).json(services)
+    } catch (error) {
+      return res.status(500).json({ msg: 'Internal server error.', error })
+    }
+  }
+
   static async getAllByUserId(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { user_id } = req.query

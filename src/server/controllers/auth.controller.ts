@@ -87,10 +87,10 @@ export default class AuthController {
       } else {
         userDB = await prisma.user.findUnique({ where: { username: user } })
       }
-      if (!userDB) return res.status(404).json({ msg: 'User not found.' })
+      if (!userDB) return res.status(404).json({ msg: 'User or password invalid.' })
       if (!userDB.active) return res.status(401).json({ msg: 'User not verified.' })
       const isMatch = await bcrypt.compare(password, userDB.password)
-      if (!isMatch) return res.status(401).json({ msg: 'Invalid password.' })
+      if (!isMatch) return res.status(401).json({ msg: 'User or password invalid.' })
       const accessToken = AuthHelper.generateToken(userDB)
       return res
         .setHeader('Set-Cookie', `accessToken=${accessToken}; Path=/; SameSite=Lax; Secure; Max-Age=${process.env.JWT_EXPIRES}`)
