@@ -54,5 +54,9 @@ export default class AuthHelper {
     }
   }
 
+  static decodeToken(token: string) {
+    return jwt.verify(token, process.env.JWT_SECRET as string)
+  }
+
 }
 
