@@ -1,5 +1,6 @@
 import { useStore } from '@/store/serviceStore';
-import { type Posts, posts } from '@/lib/data'
+//import { type Posts, posts } from '@/lib/data'
+import { type AllPosts } from '@/services/getAllPosts';
 
 
 
@@ -9,8 +10,8 @@ const useFilterPosts = () => {
         setFilterConfig: state.setFilterConfig
     }));
 
-    const filterPosts = (posts: Posts[]) => {
-        const sortPosts = (posts: Posts[]) => {
+    const filterPosts = (posts: AllPosts[]) => {
+        const sortPosts = (posts: AllPosts[]) => {
             if (filterConfig.sort === 'newest') {
                 return posts.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -21,11 +22,11 @@ const useFilterPosts = () => {
                 })
             } else if (filterConfig.sort === 'bestrated') {
                 return posts.sort((a, b) => {
-                    return b.stars - a.stars;
+                    return b.rating - a.rating;
                 })
             } else if (filterConfig.sort === 'worstrated') {
                 return posts.sort((a, b) => {
-                    return a.stars - b.stars;
+                    return a.rating - b.rating;
                 })
             }
             return posts
@@ -33,11 +34,11 @@ const useFilterPosts = () => {
         const sortedPosts = sortPosts(posts)
 
         return sortedPosts.filter(post => {
-            const newCity = post.location.split(', ').slice(0, -1).join('').toLowerCase().replaceAll(' ', '-')
+            const newCity = post.city_name
 
             return (
-                (filterConfig.priceRange[0] <= Number(post.price) &&
-                    filterConfig.priceRange[1] >= Number(post.price)) &&
+                (filterConfig.priceRange[0] <= Number(post.hourly_price) &&
+                    filterConfig.priceRange[1] >= Number(post.hourly_price)) &&
                 (filterConfig.category === 'all' || filterConfig.category === post.category.toLowerCase().replaceAll(' ', '-'))
                 && (filterConfig.city === 'all' || filterConfig.city === newCity) &&
                 (filterConfig.currency === 'all' || filterConfig.currency === post.currency.toLowerCase()) && (

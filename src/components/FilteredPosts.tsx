@@ -3,16 +3,32 @@ import { CheckCircle2, Star } from 'lucide-react'
 import LocationIcon from '@/components/icons/LocationIcon'
 import BillIcon from '@/components/icons/BillIcon'
 import useFilterPosts from '@/hooks/useFilterPosts'
-import { posts } from '@/lib/data'
+//import { posts } from '@/lib/data'
+import { AllPosts, getAllPosts } from '@/services/getAllPosts'
+import { useEffect, useState } from 'react'
 
 const FilteredPosts = () => {
+    const [filteredPosts, setFilteredPosts] = useState<AllPosts[]>([])
     const { filterPosts } = useFilterPosts();
-    const filteredPosts = filterPosts(posts);
+    //const filteredPosts = filterPosts(posts);
 
-    function dateConverter(date: string) {
-        const newDate = new Date(date);
-        return newDate.toLocaleDateString();
-    }
+    useEffect(() => {
+        const fetchFilteredPosts = async () => {
+            try {
+                const data = await getAllPosts();
+                if (data) {
+                    const filteredData = filterPosts(data);
+                    setFilteredPosts(filteredData);
+                }
+            } catch (error) {
+                console.error('Failed to fetch posts:', error);
+            }
+        };
+
+        fetchFilteredPosts();
+
+    }, []);
+
 
     return (
         <>
@@ -29,7 +45,7 @@ const FilteredPosts = () => {
                                         className='ring-1 w-full ring-zinc-200 rounded-sm object-cover aspect-square' />
 
                                     {
-                                        post.stars > 4 && (
+                                        post.rating > 4 && (
                                             <div className='absolute top-2 -left-2 px-2 py-1 rounded-lg bg-lime-500/90 w-fit text-center text-xs text-white font-semibold '>
                                                 TOP RATED
                                             </div>
@@ -44,7 +60,7 @@ const FilteredPosts = () => {
                                     <p className='text-xs md:text-sm lg:text-base'>{post.title}</p>
                                     <span
                                         className='text-xs md:text-md lg:text-base font-normal flex gap-1 items-center'>
-                                        by: {post.by} {
+                                        by: {post.username} {
                                             post.isVerified
                                             &&
                                             <CheckCircle2 className='fill-sky-500 stroke-white stroke-2 size-4' />
@@ -53,17 +69,17 @@ const FilteredPosts = () => {
 
                                     <p
                                         className='flex gap-1 items-center text-xs md:text-base' >
-                                        <LocationIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3'} /> {post.location}
+                                        <LocationIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3'} /> {post.city_name}
                                     </p>
-                                    <p className='flex gap-1 items-center text-xs md:text-base'><BillIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3  '} /> from {post.price} {post.currency}</p>
+                                    <p className='flex gap-1 items-center text-xs md:text-base'><BillIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3  '} /> from {post.hourly_price} {post.currency}</p>
                                     <div className='flex items-center'>
                                         {
-                                            post.stars > 0 ? post.stars <= 5 && (
+                                            post.rating > 0 ? post.rating <= 5 && (
                                                 Array(5).fill(0).map((_, index) => (
                                                     <Star
                                                         key={index}
                                                         size={16}
-                                                        fill={index < post.stars ? 'gold' : 'gray'}
+                                                        fill={index < post.rating ? 'gold' : 'gray'}
                                                         className="stroke-1 stroke-zinc-500" />
                                                 )
                                                 )) :
@@ -78,7 +94,7 @@ const FilteredPosts = () => {
 
                                         }
                                         {
-                                            post.reviews.length > 0 && <p className='text-sm font-light ml-2'>({post.reviews.length})</p>
+                                            post.num_reviews > 0 && <p className='text-sm font-light ml-2'>({post.num_reviews})</p>
                                         }
                                     </div>
                                 </div>
@@ -87,7 +103,7 @@ const FilteredPosts = () => {
                             <div className='hidden md:flex flex-col-reverse h-full gap-2 md:items-end justify-between w-fit'>
                                 <button className='bg-green-500 text-white px-4 py-2 rounded-lg w-full text-nowrap'>Hire now</button>
                                 <div>
-                                    <p className='text-xs font-light text-end'>{`posted at ${dateConverter(post.createdAt)}`}</p>
+                                    <p className='text-xs font-light text-end'>{`posted at ${post.createdAt}`}</p>
                                 </div>
                             </div>
                         </div>)

@@ -64,12 +64,16 @@ model ServiceType {
 
 model Service {
   id           Int      @id @default(autoincrement())
+  title        String?
+  username     String?
   description  String
   hourly_price Float?
+  currency     String   @default("USD")
   rating       Float?
   num_reviews  Float?
   times_hired  Float?
   url_image    String?
+  isVerified   Boolean  @default(false)
   shown        Boolean  @default(true)
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
@@ -91,6 +95,7 @@ model Service {
 model Review {
   id      Int     @id @default(autoincrement())
   rating  Float
+  title   String?
   comment String
   active  Boolean @default(true)
   by      String?

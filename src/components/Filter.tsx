@@ -5,14 +5,14 @@
 import useFilterPosts from '@/hooks/useFilterPosts'
 import { Checkbox, CheckboxGroup, Divider, Radio, RadioGroup, Select, SelectItem, Slider } from '@nextui-org/react'
 import { FilterIcon, Trash2 } from 'lucide-react'
-import { posts } from '@/lib/data'
+//import { posts } from '@/lib/data'
 import { useEffect } from 'react'
 import SelectionSkeleton from './SelectionSkeleton'
 import { useStore } from '@/store/serviceStore'
 import { AllServices, getAllServices } from '@/services/getAllServices'
+import allCities from '@/../public/data/cities.json'
 
 const Filter: React.FC = () => {
-
     const { services, setServices } = useStore(state => ({
         services: state.services,
         setServices: state.setServices
@@ -29,13 +29,14 @@ const Filter: React.FC = () => {
         };
 
         fetchServices();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const { filterConfig, setFilterConfig } = useFilterPosts();
 
-    const newCity = new Set(posts.map(post => post.location.split(', ').slice(0, -1).join('')))
-    const allCities = Array.from(newCity)
+    //const newCity = new Set(allPosts.map(post => post.city_name))
+    //const allCities = Array.from(newCity)
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value
@@ -143,11 +144,11 @@ const Filter: React.FC = () => {
                 <Select label='City' color='default' size='sm' className='shadow-sm' onChange={(e) => handleCityChange(e)} disallowEmptySelection defaultSelectedKeys={filterConfig.city}>
                     <SelectItem key={'all'} value="all">All</SelectItem>
                     {
-                        allCities.map((city: string) => (
+                        allCities.map((city) => (
                             <SelectItem
-                                key={city.toLowerCase().replaceAll(' ', '-')}
-                                value={city}>
-                                {city}
+                                key={city.id}
+                                value={city.name}>
+                                {city.name}
                             </SelectItem>
                         ))
                     }
