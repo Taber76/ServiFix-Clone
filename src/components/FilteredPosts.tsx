@@ -6,11 +6,13 @@ import useFilterPosts from '@/hooks/useFilterPosts'
 //import { posts } from '@/lib/data'
 import { AllPosts, getAllPosts } from '@/services/getAllPosts'
 import { useEffect, useState } from 'react'
+import { useStore } from '@/store/serviceStore';
 
 const FilteredPosts = () => {
     const [filteredPosts, setFilteredPosts] = useState<AllPosts[]>([])
     const { filterPosts } = useFilterPosts();
     //const filteredPosts = filterPosts(posts);
+    const { filterConfig } = useStore(state => ({ filterConfig: state.filterConfig }));
 
     useEffect(() => {
         const fetchFilteredPosts = async () => {
@@ -27,7 +29,7 @@ const FilteredPosts = () => {
 
         fetchFilteredPosts();
 
-    }, []);
+    }, [filterConfig]);
 
 
     return (

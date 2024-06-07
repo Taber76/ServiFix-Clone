@@ -43,12 +43,16 @@ export default class AdminController {
         return bestService;
       }));
       const serviceTypes = await prisma.serviceType.findMany();
+      const cities = await prisma.city.findMany();
 
       const bestSellersPath = path.join(process.cwd(), 'public/data', 'bestsellers.json');
       const serviceTypesPath = path.join(process.cwd(), 'public/data', 'servicetypes.json');
+      const citiesPath = path.join(process.cwd(), 'public/data', 'cities.json');
 
       fs.writeFileSync(bestSellersPath, JSON.stringify(bestServicesByType));
       fs.writeFileSync(serviceTypesPath, JSON.stringify(serviceTypes));
+      fs.writeFileSync(citiesPath, JSON.stringify(cities));
+
       return res.status(200).json({ msg: 'Best sellers and service types generated successfully.' });
     } catch (error) {
       return res.status(500).json({ error })
