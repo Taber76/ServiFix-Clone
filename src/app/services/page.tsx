@@ -10,18 +10,14 @@ const Services = () => {
             <MaxWidthWrapper>
                 <div className='flex gap-4'>
                     <aside className='min-w-[300px] lg:flex hidden'>
-                        <Suspense>
-                            <Filter />
-                        </Suspense>
+                        <Filter />
                     </aside>
                     <main className='md:bg-zinc-100 w-full items-center min-h-[calc(100vh-15rem-1px)] gap-4 md:p-4 flex flex-col rounded-lg' >
                         <h2 className='text-3xl font-bold text-center'>Services</h2>
                         <div className='flex h-full flex-col gap-2 md:gap-4 w-full'>
-                            {
-                                <Suspense fallback={<PostSkeleton />}>
-                                    <FilteredPosts />
-                                </Suspense>
-                            }
+                            <Suspense fallback={<PostSkeleton />}>
+                                <FilteredPosts />
+                            </Suspense>
                         </div>
                     </main>
 
