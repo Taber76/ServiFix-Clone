@@ -7,11 +7,14 @@ import axios from 'axios'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useState } from 'react'
+import { useAuthStore } from '@/store/serviceStore'
 
 const Login = () => {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const { toast } = useToast()
+    const { setAuthState } = useAuthStore();
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
@@ -33,10 +36,7 @@ const Login = () => {
                     description: `${data.data.msg} ✅`,
                     variant: 'default'
                 })
-
-                /// momentaneo ////////////
-                sessionStorage.setItem('user_id', data.data.user.id)
-
+                setAuthState({ isAuthenticated: true, user: data.data.user })
                 router.push('/services')
             }
 

@@ -39,16 +39,16 @@ export const useStore = create<ServiceStore>((set) => ({
     services: [],
     setServices: (services: AllServices[]) => set({ services }),
     filterConfig: initialFilterConfig,
-    setFilterConfig: (newConfig: Partial<FilterConfig>) => {
-        set(state => ({
-            filterConfig: { ...state.filterConfig, ...newConfig }
-        }))
-    }
+    setFilterConfig: (newConfig: Partial<FilterConfig>) => set(state => ({
+        filterConfig: { ...state.filterConfig, ...newConfig }
+    }))
 }));
 
 export const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: false,
     user: null,
-    setAuthState: (authState) => set(authState),
+    setAuthState: (authState) => {
+        console.log(authState); set(authState)
+    },
     clearAuthState: () => set({ isAuthenticated: false, user: null })
 }));
