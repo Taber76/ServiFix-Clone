@@ -11,7 +11,9 @@ interface DetailedPostProps {
     post_id?: number | 21
 }
 
-const DetailedPost: React.FC<DetailedPostProps> = ({ post_id }) => {
+const DetailedPost: React.FC<DetailedPostProps> = ({ 
+    
+ }) => {
     const [user_id, setUser_id] = useState<number | null>(null);
     const { user } = useAuthStore(state => ({ user: state.user }));
 
