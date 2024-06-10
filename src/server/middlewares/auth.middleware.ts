@@ -16,6 +16,6 @@ export default class AuthMiddleware {
     const authResponse = AuthHelper.authenticateUserToken(accessToken, userTypes)
     if (!authResponse.success) return { success: false, error: 'Invalid access token.' }
 
-    return { success: true, user_id: authResponse.data?.user_id }
+    return { success: true, user_id: authResponse.data?.user_id, cookies, accessToken, decoded: authResponse.data }
   }
 }

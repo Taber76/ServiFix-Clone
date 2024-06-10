@@ -4,6 +4,7 @@ import allCities from "@/../public/data/cities.json";
 export interface AllPosts {
     id: number;
     username: string; // changed "by" to "username"
+    user_id: number;
     isVerified: boolean;
     service_type_id: string;
     category: string;

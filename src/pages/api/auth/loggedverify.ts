@@ -7,6 +7,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const middlewareResponse = AuthMiddleware.checkAuth(req, ['SUPPLIER', 'COSTUMER', 'ADMIN']);
-  return res.status(200).json({ success: middlewareResponse.success });
+  return res.status(200).json({ success: middlewareResponse.success, middlewareResponse });
 
 }
