@@ -33,6 +33,10 @@ const Login = () => {
                     description: `${data.data.msg} ✅`,
                     variant: 'default'
                 })
+
+                /// momentaneo ////////////
+                sessionStorage.setItem('user_id', data.data.user.id)
+
                 router.push('/services')
             }
 

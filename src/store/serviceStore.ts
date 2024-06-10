@@ -8,6 +8,7 @@ interface FilterConfig {
     currency: string;
     verifiedOnly: boolean;
     priceRange: [number, number];
+    user_id?: number;
 }
 
 interface ServiceStore {
@@ -30,16 +31,19 @@ const initialFilterConfig: FilterConfig = {
     city: 'all',
     currency: 'all',
     verifiedOnly: false,
-    priceRange: [0, 100000]
+    priceRange: [0, 100000],
+    user_id: undefined
 };
 
 export const useStore = create<ServiceStore>((set) => ({
     services: [],
     setServices: (services: AllServices[]) => set({ services }),
     filterConfig: initialFilterConfig,
-    setFilterConfig: (newConfig: Partial<FilterConfig>) => set(state => ({
-        filterConfig: { ...state.filterConfig, ...newConfig }
-    }))
+    setFilterConfig: (newConfig: Partial<FilterConfig>) => {
+        set(state => ({
+            filterConfig: { ...state.filterConfig, ...newConfig }
+        }))
+    }
 }));
 
 export const useAuthStore = create<AuthState>((set) => ({

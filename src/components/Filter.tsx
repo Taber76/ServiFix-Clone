@@ -12,7 +12,11 @@ import { useStore } from '@/store/serviceStore'
 import { AllServices, getAllServices } from '@/services/getAllServices'
 import allCities from '@/../public/data/cities.json'
 
-const Filter: React.FC = () => {
+interface FilterProps {
+    user_id?: number | null;
+}
+
+const Filter: React.FC<FilterProps> = ({ user_id }) => {
     const { services, setServices } = useStore(state => ({
         services: state.services,
         setServices: state.setServices
@@ -29,11 +33,21 @@ const Filter: React.FC = () => {
         };
 
         fetchServices();
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const { filterConfig, setFilterConfig } = useFilterPosts();
+
+    useEffect(() => {
+        if (user_id) {
+            setFilterConfig({
+                ...filterConfig,
+                user_id: user_id,
+            });
+        }
+        console.log(services);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user_id]);
 
     //const newCity = new Set(allPosts.map(post => post.city_name))
     //const allCities = Array.from(newCity)
@@ -85,7 +99,7 @@ const Filter: React.FC = () => {
             city: 'all',
             currency: 'all',
             verifiedOnly: false,
-            priceRange: [0, 100000]
+            priceRange: [0, 100000],
         })
     }
 
@@ -201,6 +215,7 @@ const Filter: React.FC = () => {
                         />
                 }
             </div>
+
         </div >
     )
 }

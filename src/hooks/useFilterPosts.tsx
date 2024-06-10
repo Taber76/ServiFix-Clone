@@ -43,7 +43,8 @@ const useFilterPosts = () => {
                 && (filterConfig.city === 'all' || filterConfig.city === newCity) &&
                 (filterConfig.currency === 'all' || filterConfig.currency === post.currency.toLowerCase()) && (
                     filterConfig.verifiedOnly ? post.isVerified : post
-                )
+                ) &&
+                (filterConfig.user_id ? post.user_id === filterConfig.user_id : post)
 
             )
         });
