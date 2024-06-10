@@ -1,4 +1,5 @@
 import OpenAI from "openai"
+import { prisma } from "@/server/lib/prisma"
 
 const propmpt = "El siguiente mensaje es de una review de un servicio que a prestado un proveedor, si te parece adecuado que no insulta o demas responde 1 y si no responde 0:"
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
@@ -20,6 +21,32 @@ export default class ReviewHelper {
       return false
     }
   }
+
+  static async getReviewsAndUserInfo(service_id: number) {
+    try {
+      const reviews = await prisma.review.findMany({
+        where: { service_id: service_id }
+      })
+      const reviewsWithUser = await Promise.all(reviews.map(async (review: any) => {
+        const user = await prisma.user.findUnique({
+          where: { id: review.user_id },
+          select: { username: true }
+        })
+        return {
+          ...review,
+          by: user?.username,
+          commentarie: review.comment,
+          url_image: null
+        }
+      }))
+
+      return reviewsWithUser
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+
 
 
 }

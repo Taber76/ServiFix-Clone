@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/server/lib/prisma'
 import UploadHelper from '../helpers/upload.helper'
+import ReviewHelper from '../helpers/review.helper'
 import sharp from 'sharp'
+import { Currency } from 'lucide-react'
 
 export default class ServiceController {
 
@@ -104,9 +106,38 @@ export default class ServiceController {
   static async getByServiceId(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { id } = req.query
-      const service = await prisma.service.findUnique({ where: { id: Number(id) } })
+      const service = await prisma.service.findUnique({ where: { id: Number(id), active: true } })
       if (!service) return res.status(404).json({ msg: 'Service not found' })
-      return res.status(200).json(service)
+
+      const reviewsWithUser = await ReviewHelper.getReviewsAndUserInfo(service.id)
+      const category = await prisma.serviceType.findUnique({ where: { id: service.service_type_id }, select: { name: true } })
+      const city = await prisma.city.findUnique({ where: { id: service.city_id }, select: { name: true } })
+      const user = await prisma.user.findUnique({ where: { id: service.user_id } })
+      if (!user || !city || !category) return res.status(500).json({ msg: 'Internal server error.' })
+
+      const serviceWithInfo = {
+        id: service.id,
+        postedBy: {
+          ...user,
+          password: null,
+          key: null,
+          password_reset_key: null
+        },
+        category: category.name,
+        title: service.title,
+        description: service.description,
+        url_image: service.url_image,
+        price: service.hourly_price,
+        currency: service.currency,
+        location: city.name,
+        stars: service.rating,
+        city: city.name,
+        reviews: reviewsWithUser,
+        createdAt: service.createdAt,
+        updatedAt: service.updatedAt
+      }
+
+      return res.status(200).json(serviceWithInfo)
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
     }
