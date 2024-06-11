@@ -78,7 +78,7 @@ const Page = () => {
                                             post?.postedBy.rating != null ? (post?.postedBy.rating > 0 && post?.postedBy.rating <= 5 && (
                                                 Array(5).fill(0).map((_, index) => (
                                                     <Star
-                                                        key={crypto.randomUUID()}
+                                                        key={index}
                                                         size={16}
                                                         fill={post.postedBy.rating && index < post?.postedBy.rating ? 'gold' : 'gray'}
                                                         className="stroke-1 stroke-zinc-500" />
@@ -86,7 +86,7 @@ const Page = () => {
                                                 ))
                                             ) : Array(5).fill(0).map((_, index) => (
                                                 <Star
-                                                    key={crypto.randomUUID()}
+                                                    key={index}
                                                     size={16}
                                                     fill="gray"
                                                     className="stroke-1 stroke-zinc-500" />)
@@ -114,7 +114,7 @@ const Page = () => {
                                         post?.stars != null ? (post?.stars > 0 && post?.stars <= 5 && (
                                             Array(5).fill(0).map((_, index) => (
                                                 <Star
-                                                    key={crypto.randomUUID()}
+                                                    key={index}
                                                     size={24}
                                                     fill={post?.stars && index < post?.stars ? 'gold' : 'gray'}
                                                     className="stroke-1 stroke-zinc-500" />
@@ -122,7 +122,7 @@ const Page = () => {
                                             ))
                                         ) : Array(5).fill(0).map((_, index) => (
                                             <Star
-                                                key={crypto.randomUUID()}
+                                                key={index}
                                                 size={24}
                                                 fill="gray"
                                                 className="stroke-1 stroke-zinc-500" />)
@@ -188,7 +188,7 @@ const Page = () => {
                                     post?.postedBy.rating != null ? (post?.postedBy.rating > 0 && post?.postedBy.rating <= 5 && (
                                         Array(5).fill(0).map((_, index) => (
                                             <Star
-                                                key={crypto.randomUUID()}
+                                                key={index}
                                                 size={24}
                                                 fill={post.postedBy.rating && index < post?.postedBy.rating ? 'gold' : 'gray'}
                                                 className="stroke-1 stroke-zinc-500" />
@@ -196,7 +196,7 @@ const Page = () => {
                                         ))
                                     ) : Array(5).fill(0).map((_, index) => (
                                         <Star
-                                            key={crypto.randomUUID()}
+                                            key={index}
                                             size={24}
                                             fill="gray"
                                             className="stroke-1 stroke-zinc-500" />)
@@ -223,7 +223,7 @@ const Page = () => {
                     <div className='bg-zinc-100 lg:p-2 flex flex-col gap-4 ro'>
                         {
                             post?.reviews.map((review, index) => (
-                                <>
+                                <div key={index}>
                                     <div className='flex gap-2 py-4'>
                                         <div className='size-12 shrink-0'>
                                             <img src={review.url_image ?? '/default-picture.webp'} alt={review.by} className='w-full aspect-square object-cover rounded-full' />
@@ -242,7 +242,7 @@ const Page = () => {
                                                         review.rating != null ? (review.rating > 0 && review.rating <= 5 && (
                                                             Array(5).fill(0).map((_, index) => (
                                                                 <Star
-                                                                    key={crypto.randomUUID()}
+                                                                    key={index}
                                                                     size={24}
                                                                     fill={review.rating && index < review.rating ? 'gold' : 'gray'}
                                                                     className="stroke-1 stroke-zinc-500" />
@@ -250,7 +250,7 @@ const Page = () => {
                                                             ))
                                                         ) : Array(5).fill(0).map((_, index) => (
                                                             <Star
-                                                                key={crypto.randomUUID()}
+                                                                key={index}
                                                                 size={24}
                                                                 fill="gray"
                                                                 className="stroke-1 stroke-zinc-500" />)
@@ -262,7 +262,7 @@ const Page = () => {
                                     {
                                         post.reviews.length - 1 !== index ? <Divider /> : null
                                     }
-                                </>
+                                </div>
                             ))}
                     </div>
                 </section>
