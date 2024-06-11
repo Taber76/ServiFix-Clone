@@ -91,7 +91,7 @@ const FilteredPosts = async () => {
                                     className='flex gap-1 items-center text-xs md:text-base' >
                                     <LocationIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3'} /> {post.city}
                                 </p>
-                                <p className='flex gap-1 items-center text-xs md:text-base'><BillIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3  '} /> from {post.price} {post.currency}</p>
+                                <p className='flex gap-1 items-center text-xs md:text-base'><BillIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3  '} /> from {post.hourly_price} {post.currency}</p>
                                 <div className='flex items-center'>
                                     {
                                         post.stars > 0 ? post.stars <= 5 && (

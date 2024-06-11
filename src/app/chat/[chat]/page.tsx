@@ -6,7 +6,7 @@ import axios from 'axios'
 import { CheckCircle2, MessageSquareText, MessageSquareTextIcon, Star, VerifiedIcon } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { type Post } from '@/types/front.types'
+import { type DetailedPost } from '@/types/front.types'
 import { Button, Divider, Input } from '@nextui-org/react'
 import { ChatDialogModal } from '@/components/ChatDialog';
 import { useAuthStore } from '@/store/serviceStore'
@@ -15,10 +15,10 @@ import { useAuthStore } from '@/store/serviceStore'
 const Page = () => {
     const router = useRouter()
     const postId = useParams()?.chat
-    const [post, setPost] = useState<Post | null>(null)
+    const [post, setPost] = useState<DetailedPost | null>(null)
     const [isOpen, setIsOpen] = useState(false);
-    const [recipientId, setRecipientId] = useState('');
-    const [user_id, setUser_id] = useState<number | null>(null);
+    const [recipientId, setRecipientId] = useState<number | null>(null);
+    const [userId, setUserId] = useState<number | null>(null);
     const { user } = useAuthStore(state => ({ user: state.user }));
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const Page = () => {
                     router.push('/not-found')
                 }
                 setPost(isValidPost.data)
-                console.log(isValidPost.data);
+                setRecipientId(isValidPost.data.user_id)
 
             } catch (error) {
                 router.push('/not-found')
@@ -38,6 +38,13 @@ const Page = () => {
         isValidServiceId()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+
+    useEffect(() => {
+        if (user) {
+            setUserId(user.id)
+        }
+    }, [user])
 
     function hourConvert(time: string) {
         const date = new Date(time).toDateString()
@@ -104,14 +111,16 @@ const Page = () => {
                             value={recipientId}
                             onChange={(e) => setRecipientId(e.target.value)}
                         /> */}
-                        <Button onClick={() => setIsOpen(true)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150" >Chat <MessageSquareText /></Button>
-                        {
-
-                            < ChatDialogModal
-                                isOpen={isOpen}
-                                setIsOpen={setIsOpen}
-                                recipientId={Number(recipientId)}
-                            />}
+                        {userId == post?.postedBy.id ?
+                            <Button onClick={() => router.push(`/edit-post/${post?.id}`)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150" >Edit</Button>
+                            :
+                            <Button onClick={() => setIsOpen(true)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150" >Chat <MessageSquareText /></Button>
+                        }
+                        < ChatDialogModal
+                            isOpen={isOpen}
+                            setIsOpen={setIsOpen}
+                            recipientId={Number(recipientId)}
+                        />
                     </div>
                 </section>
                 <section id='user-info' className='flex flex-col gap-4'>
@@ -152,7 +161,7 @@ const Page = () => {
                             Reviews and Comentaries {' '}
 
                             {
-                                `(${post?.num_reviews})`
+                                `(${post?.reviews.length})`
                             }
                         </p>
                     </div>
