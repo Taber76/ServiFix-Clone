@@ -58,7 +58,7 @@ const EditPost = () => {
             if (priceInput) priceInput.value = post.price
             if (currencyInput) currencyInput.value = post.currency
         }
-    }, [post])
+    }, [post, titleInput, descriptionInput, categoryInput, cityInput, priceInput, currencyInput])
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()

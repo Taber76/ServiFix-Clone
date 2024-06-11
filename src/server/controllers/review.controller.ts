@@ -30,7 +30,18 @@ export default class ReviewController {
         }
       })
       if (!reviews) return res.status(404).json({ msg: 'No reviews found.' })
-      return res.status(200).json(reviews)
+      const reviewsWithInfo = await Promise.all(reviews.map(async (review: any) => {
+        const service = await prisma.service.findUnique({
+          where: { id: review.service_id },
+          select: { title: true, url_image: true }
+        })
+        return {
+          ...review,
+          service_title: service?.title,
+          url_image: service?.url_image
+        }
+      }))
+      return res.status(200).json(reviewsWithInfo)
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
     }
@@ -38,7 +49,7 @@ export default class ReviewController {
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { user_id, service_id, username, rating, comment } = req.body
+      const { user_id, service_id, username, rating, title, comment } = req.body
       const checkReview = await ReviewHelper.checkReview(comment)
       if (!checkReview) return res.status(403).json({ msg: 'You review conntains inappropriate content, or could not be reviewed.' })
       const previousReview = await prisma.review.findFirst({
@@ -53,6 +64,7 @@ export default class ReviewController {
           user_id: Number(user_id),
           service_id: Number(service_id),
           rating: Number(rating),
+          title,
           comment,
           by: username ? username : "Anonymous"
         }
@@ -66,8 +78,9 @@ export default class ReviewController {
 
   static async update(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { id, rating, comment, user_id } = req.body
+      const { id, rating, title, comment, user_id } = req.body
       const data = {
+        title: title ? title : undefined,
         rating: rating ? Number(rating) : undefined,
         comment: comment ? comment : undefined
       }
@@ -95,6 +108,21 @@ export default class ReviewController {
         data: { active: false }
       })
       if (!review) return res.status(404).json({ msg: 'Review not deleted.' })
+      return res.status(200).json(review)
+    } catch (error) {
+      return res.status(500).json({ msg: 'Internal server error.', error })
+    }
+  }
+
+  static async getById(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const { id } = req.query
+      const review = await prisma.review.findUnique({
+        where: {
+          id: Number(id)
+        }
+      })
+      if (!review) return res.status(404).json({ msg: 'Review not found.' })
       return res.status(200).json(review)
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
