@@ -4,14 +4,15 @@ import LocationIcon from '@/components/icons/LocationIcon'
 import BillIcon from '@/components/icons/BillIcon'
 import useFilterPosts from '@/hooks/useFilterPosts'
 //import { posts } from '@/lib/data'
-import { AllPosts, getAllPosts } from '@/services/getAllPosts'
+import { type Post } from '@/types/front.types'
+import { getAllPosts } from '@/services/getAllPosts'
 import { useEffect, useState } from 'react'
 import { useStore } from '@/store/serviceStore';
 import { useRouter } from 'next/navigation'
 import SelectionSkeleton from './SelectionSkeleton'
 
 const FilteredPosts = async () => {
-    const [filteredPosts, setFilteredPosts] = useState<AllPosts[] | undefined>([])
+    const [filteredPosts, setFilteredPosts] = useState<Post[] | undefined>([])
     const { filterPosts } = useFilterPosts();
     //const filteredPosts = filterPosts(posts);
     const { filterConfig } = useStore(state => ({ filterConfig: state.filterConfig }));
@@ -39,7 +40,7 @@ const FilteredPosts = async () => {
         }
     };
 
-    const handlePostClick = (post: AllPosts) => {
+    const handlePostClick = (post: Post) => {
         router.push(`/chat/${post.id}`);
     };
 
@@ -64,7 +65,7 @@ const FilteredPosts = async () => {
                                     className='ring-1 w-full ring-zinc-200 rounded-sm object-cover aspect-square' />
 
                                 {
-                                    post.rating > 4 && (
+                                    post.stars > 4 && (
                                         <div className='absolute top-2 -left-2 px-2 py-1 rounded-lg bg-lime-500/90 w-fit text-center text-xs text-white font-semibold '>
                                             TOP RATED
                                         </div>
@@ -88,17 +89,17 @@ const FilteredPosts = async () => {
 
                                 <p
                                     className='flex gap-1 items-center text-xs md:text-base' >
-                                    <LocationIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3'} /> {post.city_name}
+                                    <LocationIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3'} /> {post.city}
                                 </p>
-                                <p className='flex gap-1 items-center text-xs md:text-base'><BillIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3  '} /> from {post.hourly_price} {post.currency}</p>
+                                <p className='flex gap-1 items-center text-xs md:text-base'><BillIcon className={'stroke-1 stroke-green-800 md:size-5 sm:size-4 size-3  '} /> from {post.price} {post.currency}</p>
                                 <div className='flex items-center'>
                                     {
-                                        post.rating > 0 ? post.rating <= 5 && (
+                                        post.stars > 0 ? post.stars <= 5 && (
                                             Array(5).fill(0).map((_, index) => (
                                                 <Star
                                                     key={index}
                                                     size={16}
-                                                    fill={index < post.rating ? 'gold' : 'gray'}
+                                                    fill={index < post.stars ? 'gold' : 'gray'}
                                                     className="stroke-1 stroke-zinc-500" />
                                             )
                                             )) :

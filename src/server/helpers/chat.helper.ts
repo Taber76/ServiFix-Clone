@@ -12,10 +12,14 @@ export default class ChatHelper {
       }
     })
     if (!chat) {
+      const user1_photo = await prisma.user.findUnique({ where: { id: user1_id }, select: { photo: true } })
+      const user2_photo = await prisma.user.findUnique({ where: { id: user2_id }, select: { photo: true } })
       chat = await prisma.chat.create({
         data: {
           user1_id: user1_id,
-          user2_id: user2_id
+          user1_photo: user1_photo ? user1_photo.photo : null,
+          user2_id: user2_id,
+          user2_photo: user2_photo ? user2_photo.photo : null
         }
       })
     }

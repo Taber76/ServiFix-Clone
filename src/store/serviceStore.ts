@@ -1,4 +1,4 @@
-import { AllServices } from '@/services/getAllServices';
+import { type Service } from '@/types/front.types';
 import { create } from 'zustand';
 
 interface FilterConfig {
@@ -12,8 +12,8 @@ interface FilterConfig {
 }
 
 interface ServiceStore {
-    services: AllServices[] | [];
-    setServices: (services: AllServices[]) => void;
+    services: Service[] | [];
+    setServices: (services: Service[]) => void;
     filterConfig: FilterConfig;
     setFilterConfig: (filterConfig: Partial<FilterConfig>) => void;
 }
@@ -37,7 +37,7 @@ const initialFilterConfig: FilterConfig = {
 
 export const useStore = create<ServiceStore>((set) => ({
     services: [],
-    setServices: (services: AllServices[]) => set({ services }),
+    setServices: (services: Service[]) => set({ services }),
     filterConfig: initialFilterConfig,
     setFilterConfig: (newConfig: Partial<FilterConfig>) => set(state => ({
         filterConfig: { ...state.filterConfig, ...newConfig }

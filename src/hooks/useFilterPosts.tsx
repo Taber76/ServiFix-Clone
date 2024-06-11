@@ -1,6 +1,6 @@
 import { useStore } from '@/store/serviceStore';
 //import { type Posts, posts } from '@/lib/data'
-import { type AllPosts } from '@/services/getAllPosts';
+import { type Post } from '@/types/front.types';
 
 
 
@@ -10,8 +10,8 @@ const useFilterPosts = () => {
         setFilterConfig: state.setFilterConfig
     }));
 
-    const filterPosts = (posts: AllPosts[]) => {
-        const sortPosts = (posts: AllPosts[]) => {
+    const filterPosts = (posts: Post[]) => {
+        const sortPosts = (posts: Post[]) => {
             if (filterConfig.sort === 'newest') {
                 return posts.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -34,7 +34,7 @@ const useFilterPosts = () => {
         const sortedPosts = sortPosts(posts)
 
         return sortedPosts.filter(post => {
-            const newCity = post.city_name
+            const newCity = post.city
 
             return (
                 (filterConfig.priceRange[0] <= Number(post.hourly_price) &&

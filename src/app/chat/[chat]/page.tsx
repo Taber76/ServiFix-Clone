@@ -6,18 +6,20 @@ import axios from 'axios'
 import { CheckCircle2, MessageSquareText, MessageSquareTextIcon, Star, VerifiedIcon } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { type AllPosts } from '@/services/getAllPosts'
+import { type Post } from '@/types/front.types'
 import { Button, Divider, Input } from '@nextui-org/react'
 import { ChatDialogModal } from '@/components/ChatDialog';
-
+import { useAuthStore } from '@/store/serviceStore'
 
 
 const Page = () => {
     const router = useRouter()
     const postId = useParams()?.chat
-    const [post, setPost] = useState<AllPosts | null>(null)
+    const [post, setPost] = useState<Post | null>(null)
     const [isOpen, setIsOpen] = useState(false);
     const [recipientId, setRecipientId] = useState('');
+    const [user_id, setUser_id] = useState<number | null>(null);
+    const { user } = useAuthStore(state => ({ user: state.user }));
 
     useEffect(() => {
         const isValidServiceId = async () => {
@@ -90,9 +92,9 @@ const Page = () => {
                                 <div className='flex gap-2'>
                                     <div
                                         className='flex cursor-pointer gap-1 rounded-md items-center border w-min text-nowrap p-2 border-zinc-400 hover:border-zinc-600 '>
-                                        {post?.hourly_price} {post?.currency} Standar
+                                        {post?.price} {post?.currency} Standar
                                     </div>
-                                    <div className='flex cursor-pointer gap-1 rounded-md items-center border w-min text-nowrap p-2 border-zinc-400 hover:border-zinc-600 '>{(Number(post?.hourly_price) * 1.77).toFixed(1)} {post?.currency} Premium</div>
+                                    <div className='flex cursor-pointer gap-1 rounded-md items-center border w-min text-nowrap p-2 border-zinc-400 hover:border-zinc-600 '>{(Number(post?.price) * 1.77).toFixed(1)} {post?.currency} Premium</div>
                                 </div>
                             </div>
                         </div>
@@ -103,11 +105,13 @@ const Page = () => {
                             onChange={(e) => setRecipientId(e.target.value)}
                         /> */}
                         <Button onClick={() => setIsOpen(true)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150" >Chat <MessageSquareText /></Button>
-                        <ChatDialogModal
-                            isOpen={isOpen}
-                            setIsOpen={setIsOpen}
-                            recipientId={Number(recipientId)}
-                        />
+                        {
+
+                            < ChatDialogModal
+                                isOpen={isOpen}
+                                setIsOpen={setIsOpen}
+                                recipientId={Number(recipientId)}
+                            />}
                     </div>
                 </section>
                 <section id='user-info' className='flex flex-col gap-4'>
