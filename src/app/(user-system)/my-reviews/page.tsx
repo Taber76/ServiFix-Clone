@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Button, Divider, Input } from '@nextui-org/react'
 import { type Review } from '@/types/front.types'
+import { useRouter } from 'next/navigation'
 
 
 const MyReviews = () => {
+  const router = useRouter()
   const [reviews, setReviews] = useState<Review[]>([])
   const [userId, setUserId] = useState<number | null>(null);
   const { user } = useAuthStore(state => ({ user: state.user }));
@@ -48,7 +50,9 @@ const MyReviews = () => {
           {
             reviews?.map((review, index) => {
               return (
-                <div key={index}>
+                <div key={review.id}
+                  onClick={() => router.push(`/edit-review/${review.id}`)}
+                >
                   <div className='flex gap-2 py-4'>
                     <div className='size-12 shrink-0'>
                       {review.url_image ? (
