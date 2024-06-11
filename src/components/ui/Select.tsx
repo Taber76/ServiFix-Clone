@@ -2,7 +2,8 @@
 
 import React, { useEffect } from "react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import { type AllServices, getAllServices } from "@/services/getAllServices";
+import { type Service } from "@/types/front.types";
+import { getAllServices } from "@/services/getAllServices";
 import { useStore } from "@/store/serviceStore";
 
 const Select: React.FC = () => {
@@ -35,7 +36,7 @@ const Select: React.FC = () => {
                         label="Search a job"
                         className="max-w-xs"
                     >
-                        {(item: AllServices) => (
+                        {(item: Service) => (
                             <AutocompleteItem key={item.id}>
                                 {item.name}
                             </AutocompleteItem>

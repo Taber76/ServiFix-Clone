@@ -9,7 +9,8 @@ import { FilterIcon, Trash2 } from 'lucide-react'
 import { useEffect } from 'react'
 import SelectionSkeleton from './SelectionSkeleton'
 import { useStore } from '@/store/serviceStore'
-import { AllServices, getAllServices } from '@/services/getAllServices'
+import { type Service } from '@/types/front.types'
+import { getAllServices } from '@/services/getAllServices'
 import allCities from '@/../public/data/cities.json'
 
 interface FilterProps {
@@ -31,7 +32,6 @@ const Filter: React.FC<FilterProps> = ({ user_id }) => {
                 console.error('Failed to fetch services:', error);
             }
         };
-
         fetchServices();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -45,12 +45,8 @@ const Filter: React.FC<FilterProps> = ({ user_id }) => {
                 user_id: user_id,
             });
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user_id]);
-
-    //const newCity = new Set(allPosts.map(post => post.city_name))
-    //const allCities = Array.from(newCity)
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value
@@ -132,7 +128,7 @@ const Filter: React.FC<FilterProps> = ({ user_id }) => {
                             onChange={(e) => handleCategoryChange(e)} disallowEmptySelection>
                             <SelectItem key={'all'} value="all">All</SelectItem>
                             {
-                                services.map((service: AllServices) => (
+                                services.map((service: Service) => (
                                     <SelectItem
                                         key={service.name.toLowerCase().replaceAll(' ', '-')}
                                         value={service.name}>
