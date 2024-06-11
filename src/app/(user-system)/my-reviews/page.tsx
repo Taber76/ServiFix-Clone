@@ -48,7 +48,7 @@ const MyReviews = () => {
           {
             reviews?.map((review, index) => {
               return (
-                <div>
+                <div key={index}>
                   <div className='flex gap-2 py-4'>
                     <div className='size-12 shrink-0'>
                       {review.url_image ? (
