@@ -39,7 +39,7 @@ export interface PostedBy {
   active: boolean;
 }
 
-export interface Reviews {
+export interface Review {
   id: number;
   by: string;
   title: string;
@@ -47,6 +47,7 @@ export interface Reviews {
   commentarie: string;
   rating: number;
   service_id: number;
+  service_title: string;
   user_id: number;
   url_image: string;
   active: boolean;
@@ -66,7 +67,7 @@ export interface DetailedPost {
   currency: string;
   price: string;
   stars: number;
-  reviews: Reviews[];
+  reviews: Review[];
   url_image: string;
   createdAt: Date;
   updatedAt: Date;

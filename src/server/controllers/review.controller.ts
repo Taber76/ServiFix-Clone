@@ -30,7 +30,18 @@ export default class ReviewController {
         }
       })
       if (!reviews) return res.status(404).json({ msg: 'No reviews found.' })
-      return res.status(200).json(reviews)
+      const reviewsWithInfo = await Promise.all(reviews.map(async (review: any) => {
+        const service = await prisma.service.findUnique({
+          where: { id: review.service_id },
+          select: { title: true, url_image: true }
+        })
+        return {
+          ...review,
+          service_title: service?.title,
+          url_image: service?.url_image
+        }
+      }))
+      return res.status(200).json(reviewsWithInfo)
     } catch (error) {
       return res.status(500).json({ msg: 'Internal server error.', error })
     }
