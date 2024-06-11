@@ -24,53 +24,57 @@ export interface Post {
   updatedAt: Date;
 }
 
+export interface DetailedPost {
+  id: number;
+  postedBy: PostedBy;
+  category: string;
+  title: string;
+  description: string;
+  url_image: string;
+  price: number;
+  currency: string;
+  location: string;
+  stars: number;
+  city: string;
+  reviews: Review[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface PostedBy {
   id: number;
   username: string;
+  password: null;
   name: string;
   surname: string;
   email: string;
-  phone: string;
-  description: string;
   photo: string;
+  phone: null;
+  description: null;
+  personal_id: null;
+  rating: null;
   role: string;
-  rating: number;
+  key: null;
+  password_reset_key: null;
   verified: boolean;
   active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Review {
   id: number;
-  by: string;
-  title: string;
-  comment: string;
-  commentarie: string;
   rating: number;
-  service_id: number;
-  service_title: string;
-  user_id: number;
-  url_image: string;
+  title: null;
+  comment: string;
   active: boolean;
+  by: string;
+  user_id: number;
+  service_id: number;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface DetailedPost {
-  id: number;
-  postedBy: PostedBy;
-  description: string;
-  category: string;
-  service_type_id: number;
-  title: string;
-  city: string;
-  location: string;
-  currency: string;
-  price: string;
-  stars: number;
-  reviews: Review[];
-  url_image: string;
-  createdAt: Date;
-  updatedAt: Date;
+  commentarie: string;
+  url_image: null;
 }
 
 export interface Service {
