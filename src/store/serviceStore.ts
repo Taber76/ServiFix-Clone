@@ -46,9 +46,7 @@ export const useStore = create<ServiceStore>((set) => ({
 
 export const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: false,
-    user: null,
-    setAuthState: (authState) => {
-        console.log(authState); set(authState)
-    },
+    user: { id: 82 }, // debe ser null <---------------------------------------------------------------
+    setAuthState: (authState) => set(authState),
     clearAuthState: () => set({ isAuthenticated: false, user: null })
 }));

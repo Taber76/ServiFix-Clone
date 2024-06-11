@@ -145,11 +145,13 @@ export default class ServiceController {
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { description, hourly_price, user_id, service_type_id, city_id, country_id } = req.body
+      const { title, description, hourly_price, currency, user_id, service_type_id, city_id, country_id } = req.body
       const serviceExist = await prisma.service.findFirst({ where: { user_id: Number(user_id), service_type_id: Number(service_type_id) } })
       if (serviceExist) return res.status(400).json({ msg: 'Service already exists.' })
       const data = {
+        title,
         description,
+        currency: currency ? currency : 'USD',
         hourly_price: hourly_price ? Number(hourly_price) : null,
         user_id: Number(user_id),
         service_type_id: Number(service_type_id),
@@ -168,17 +170,19 @@ export default class ServiceController {
 
   static async update(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { id, description, hourly_price, user_id, service_type_id, shown, active, city_id, country_id } = req.body
+      const { id, title, description, hourly_price, currency, user_id, service_type_id, shown, active, city_id, country_id } = req.body
       const service = await prisma.service.update({
         where: { id: Number(id), user_id: Number(user_id) },
         data: {
+          title,
           description,
           hourly_price: Number(hourly_price),
+          currency,
           service_type_id: Number(service_type_id),
           shown,
           active,
           city_id,
-          country_id
+          country_id: country_id ? Number(country_id) : 1
         }
       })
       if (!service) return res.status(404).json({ msg: 'Service not updated.' })
