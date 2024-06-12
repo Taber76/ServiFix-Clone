@@ -3,48 +3,48 @@ import { CheckCircle2, Star } from 'lucide-react'
 import LocationIcon from '@/components/icons/LocationIcon'
 import BillIcon from '@/components/icons/BillIcon'
 import useFilterPosts from '@/hooks/useFilterPosts'
-//import { posts } from '@/lib/data'
 import { type Post } from '@/types/front.types'
 import { getAllPosts } from '@/services/getAllPosts'
 import { useEffect, useState } from 'react'
 import { useStore } from '@/store/serviceStore';
 import { useRouter } from 'next/navigation'
-import SelectionSkeleton from './SelectionSkeleton'
+import PostSkeleton from './PostSkeleton'
 
 const FilteredPosts = async () => {
     const [filteredPosts, setFilteredPosts] = useState<Post[] | undefined>([])
     const { filterPosts } = useFilterPosts();
-    //const filteredPosts = filterPosts(posts);
     const { filterConfig } = useStore(state => ({ filterConfig: state.filterConfig }));
     const router = useRouter()
+    const [isLoading, setIsLoading] = useState(true);
 
 
     useEffect(() => {
-        (async () => {
-            const filteredPosts = await fetchFilteredPosts();
-            setFilteredPosts(filteredPosts);
-        })()
-
+        const fetchData = async () => {
+            try {
+                const data = await getAllPosts();
+                if (data) {
+                    const filteredData = filterPosts(data);
+                    setFilteredPosts(filteredData);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterConfig])
-
-    async function fetchFilteredPosts() {
-        try {
-            const data = await getAllPosts();
-            if (data) {
-                const filteredData = filterPosts(data);
-                return filteredData;
-            }
-        } catch (error) {
-            console.error('Failed to fetch posts:', error);
-        }
-    };
 
     const handlePostClick = (post: Post) => {
         router.push(`/chat/${post.id}`);
     };
 
-    if (filteredPosts?.length === 0 || !filteredPosts) {
+    if (isLoading || !filteredPosts) {
+        return <PostSkeleton />
+    }
+
+    if (filteredPosts?.length === 0) {
         return (
             <p className='text-lg font-semibold text-center flex gap-2 h-full place-self-center mt-12'>No posts found <LocationIcon className='size-7 stroke-green-600' /></p>
         )

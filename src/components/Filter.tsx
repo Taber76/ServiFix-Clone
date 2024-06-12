@@ -120,24 +120,19 @@ const Filter: React.FC<FilterProps> = ({ user_id }) => {
             </div>
 
             <div className='flex flex-col gap-4'>
-                {
-                    services.length === 0
-                        ? <div className="w-full max-w-xs"><SelectionSkeleton /></div>
-                        :
-                        <Select label="Category" color='default' size='sm' defaultSelectedKeys={[filterConfig.category]} className='shadow-sm'
-                            onChange={(e) => handleCategoryChange(e)} disallowEmptySelection>
-                            <SelectItem key={'all'} value="all">All</SelectItem>
-                            {
-                                services.map((service: Service) => (
-                                    <SelectItem
-                                        key={service.name.toLowerCase().replaceAll(' ', '-')}
-                                        value={service.name}>
-                                        {service.name}
-                                    </SelectItem>
-                                ))
-                            }
-                        </Select>
-                }
+                <Select label="Category" color='default' size='sm' defaultSelectedKeys={[filterConfig.category]} className='shadow-sm'
+                    onChange={(e) => handleCategoryChange(e)} disallowEmptySelection>
+                    <SelectItem key={'all'} value="all">All</SelectItem>
+                    {
+                        services.map((service: Service) => (
+                            <SelectItem
+                                key={service.name.toLowerCase().replaceAll(' ', '-')}
+                                value={service.name}>
+                                {service.name}
+                            </SelectItem>
+                        ))
+                    }
+                </Select>
 
                 <Divider />
 
