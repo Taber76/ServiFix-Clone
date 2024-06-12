@@ -14,28 +14,18 @@ export default class ChatController {
             { user2_id: Number(user_id) }
           ]
         },
-        select: {
-          id: true,
-          user1: {
-            select: {
-              name: true,
-              id: true
-            }
-          },
-          user2: {
-            select: {
-              name: true,
-              id: true
-            }
-          }
-        }
       })
       if (chats.length === 0) return res.status(404).json({ error: 'No chats found.' })
       const formatedChats = chats.map(chat => {
-        const otherUser = chat.user1.id === Number(user_id) ? chat.user2 : chat.user1
         return {
           chat_id: chat.id,
-          otherUser
+          user_id: chat.user1_id === Number(user_id) ? chat.user2_id : chat.user1_id,
+          username: chat.user1_id === Number(user_id) ? chat.user2_username : chat.user1_username,
+          user_image: chat.user1_id === Number(user_id) ? chat.user2_photo : chat.user1_photo,
+          service_id: chat.service_id,
+          service_image: chat.service_image,
+          service_title: chat.service_title,
+          last_message: chat.last_message
         }
       })
 
@@ -48,7 +38,7 @@ export default class ChatController {
   static async getByUsersId(req: NextApiRequest, res: NextApiResponse) {
     try {
       let messages: any[] = []
-      const { user1_id, user2_id } = req.query
+      const { user1_id, user2_id, service_id } = req.query
       let chat = await prisma.chat.findFirst({
         where: {
           OR: [
@@ -58,7 +48,7 @@ export default class ChatController {
         }
       })
       if (!chat) {
-        chat = await ChatHelper.getChatByUserIds(Number(user1_id), Number(user2_id))
+        chat = await ChatHelper.getChatByUserIds(Number(user1_id), Number(user2_id), Number(service_id))
       } else {
         messages = await prisma.message.findMany({
           where: {
@@ -112,6 +102,11 @@ export default class ChatController {
         const chat = await ChatHelper.getChatByUserIds(user_id, recipient_id)
         chat_id = chat.id
       }
+      const algo = await prisma.chat.update({
+        where: { id: Number(chat_id) },
+        data: { last_message: message }
+      })
+      console.log(algo)
       const newMessage = await prisma.message.create({
         data: {
           chat_id: Number(chat_id),

@@ -10,8 +10,8 @@ import { Dispatch, SetStateAction } from "react";
 import Cookies from 'js-cookie';
 import { useAuthStore } from '@/store/serviceStore'
 
-export function ChatDialogModal({ isOpen, setIsOpen, recipientId }:
-    { isOpen: boolean, setIsOpen: Dispatch<SetStateAction<boolean>>, recipientId: number }) {
+export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
+    { isOpen: boolean, setIsOpen: Dispatch<SetStateAction<boolean>>, recipientId: number, serviceId: number }) {
 
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState<any[]>([]);
@@ -32,7 +32,7 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId }:
     useEffect(() => {
         const fetchChatHistory = async () => {
             try {
-                const response = await axios.get(`/api/chat/getbyusers?user2_id=${recipientId}`);
+                const response = await axios.get(`/api/chat/getbyusers?user2_id=${recipientId}&service_id=${serviceId}`);
                 if (response.status !== 200) return;
                 const { chat, messages } = response.data;
                 console.log(chat, messages)

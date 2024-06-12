@@ -176,6 +176,7 @@ const Page = () => {
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
                             recipientId={Number(recipientId)}
+                            serviceId={post?.id}
                         />
                     </div>
                 </section>
