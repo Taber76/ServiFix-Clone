@@ -31,7 +31,7 @@ const Page = () => {
                     router.push('/not-found')
                 }
                 setPost(postsData.data)
-                setRecipientId(postsData.data.user_id)
+                setRecipientId(postsData.data.postedBy.id)
 
             } catch (error) {
                 router.push('/not-found')

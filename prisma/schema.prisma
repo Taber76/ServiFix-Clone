@@ -112,11 +112,13 @@ model Review {
 }
 
 model Chat {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user1_photo String?
-  user2_photo String?
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user1_photo    String?
+  user1_username String?
+  user2_photo    String?
+  user2_username String?
 
   user1_id Int
   user1    User      @relation("chats_as_user1", fields: [user1_id], references: [id])
