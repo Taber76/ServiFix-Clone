@@ -8,47 +8,63 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Dispatch, SetStateAction } from "react";
 import Cookies from 'js-cookie';
+import { useAuthStore } from '@/store/serviceStore'
 
 export function ChatDialogModal({ isOpen, setIsOpen, recipientId }:
     { isOpen: boolean, setIsOpen: Dispatch<SetStateAction<boolean>>, recipientId: number }) {
 
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState<any[]>([]);
+    const [chatInfo, setChatInfo] = useState<any>({});
     const [isConnected, setIsConnected] = useState(false);
     const socketRef = useRef<Socket | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const [userId, setUserId] = useState<number | null>(null);
+    const { user } = useAuthStore(state => ({ user: state.user }));
 
-    const contactImage = "https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
+    useEffect(() => {
+        if (user) {
+            setUserId(user.id)
+        }
+    }, [user])
+
 
     useEffect(() => {
         const fetchChatHistory = async () => {
             try {
                 const response = await axios.get(`/api/chat/getbyusers?user2_id=${recipientId}`);
-                setMessages(response.data.messages);
+                if (response.status !== 200) return;
+                const { chat, messages } = response.data;
+                console.log(chat, messages)
+                setMessages(messages);
+                setChatInfo(chat);
+
             } catch (error) {
                 console.error("Error fetching chat history:", error);
             }
         };
-        if (isOpen) fetchChatHistory()
 
         const socketInit = async () => {
             await axios.get('/api/socket');
             socketRef.current = io();
             socketRef.current.emit('authenticate', Cookies.get('accessToken'));
-            socketRef.current.on('message', (msg, recipient_id) => {
-                if (recipient_id === recipientId)
+            socketRef.current.on('message', (msg, senderId) => {
+                if (senderId === recipientId)
                     setMessages((prev) => [...prev, { message: msg, sender_id: recipientId }]);
             });
         };
 
-        socketInit();
+        if (isOpen && userId) {
+            fetchChatHistory()
+            socketInit();
+        }
 
         return () => {
             if (socketRef.current) {
                 socketRef.current.disconnect();
             }
         };
-    }, [isOpen, recipientId]);
+    }, [isOpen, recipientId, userId]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -79,11 +95,11 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId }:
                                         </svg>
                                     </span>
                                 }
-                                <img src={contactImage} alt="" className="w-5 sm:w-12 h-5 sm:h-12 rounded-full" />
+                                <img src={recipientId === chatInfo.user1_id ? chatInfo.user1_photo : chatInfo.user2_photo} alt="" className="w-5 sm:w-12 h-5 sm:h-12 rounded-full" />
                             </div>
                             <div className="flex flex-col leading-tight">
                                 <div className="text-2xl mt-1 flex items-center">
-                                    <span className="text-gray-700 mr-3">Nombre contacto</span>
+                                    <span className="text-gray-700 mr-3">{recipientId === chatInfo.user1_id ? chatInfo.user1_username : chatInfo.user2_username}</span>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +117,7 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId }:
                                     <div className={`flex flex-col space-y-2 text-xs max-w-xs mx-2 ${msg.sender_id == recipientId ? 'items-start order-2' : 'items-end order-1'}`}>
                                         <div><span className={`px-4 py-2 rounded-lg inline-block rounded-bl-none ${msg.sender_id == recipientId ? 'bg-gray-300 text-gray-600' : 'bg-blue-600 text-blue-100'}`}>{msg.message}</span></div>
                                     </div>
-                                    {msg.sender_id == recipientId && <img src={contactImage} alt="My profile" className="w-6 h-6 rounded-full order-1" />}
+                                    {msg.sender_id == recipientId && <img src={recipientId === chatInfo.user1_id ? chatInfo.user1_username : chatInfo.user2_username} alt="My profile" className="w-6 h-6 rounded-full order-1" />}
                                 </div>
                             </div>
                         ))}

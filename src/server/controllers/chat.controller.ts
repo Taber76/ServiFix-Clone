@@ -55,18 +55,10 @@ export default class ChatController {
             { user1_id: Number(user1_id), user2_id: Number(user2_id) },
             { user1_id: Number(user2_id), user2_id: Number(user1_id) }
           ]
-        },
-        select: {
-          id: true
         }
       })
       if (!chat) {
-        chat = await prisma.chat.create({
-          data: {
-            user1_id: Number(user1_id),
-            user2_id: Number(user2_id)
-          }
-        })
+        chat = await ChatHelper.getChatByUserIds(Number(user1_id), Number(user2_id))
       } else {
         messages = await prisma.message.findMany({
           where: {
@@ -77,7 +69,7 @@ export default class ChatController {
           }
         })
       }
-      return res.status(200).json({ chat_id: chat.id, messages })
+      return res.status(200).json({ chat, messages })
     } catch (error) {
       return res.status(500).json({ error })
     }
@@ -117,7 +109,8 @@ export default class ChatController {
       let { chat_id, user_id, recipient_id, message } = req.body
       if (!chat_id) {
         if (!recipient_id) return res.status(400).json({ error: 'Missing recipient_id or chat_id' })
-        chat_id = await ChatHelper.getChatIdByUserIds(user_id, recipient_id)
+        const chat = await ChatHelper.getChatByUserIds(user_id, recipient_id)
+        chat_id = chat.id
       }
       const newMessage = await prisma.message.create({
         data: {
@@ -135,10 +128,10 @@ export default class ChatController {
 
   static async socketSaveMessage(user1_id: number, user2_id: number, message: string) {
     try {
-      const chat_id = await ChatHelper.getChatIdByUserIds(user1_id, user2_id)
+      const chat = await ChatHelper.getChatByUserIds(user1_id, user2_id)
       const newMessage = await prisma.message.create({
         data: {
-          chat_id: Number(chat_id),
+          chat_id: chat.id,
           sender_id: user1_id,
           message
         }
