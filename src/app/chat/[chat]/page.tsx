@@ -11,6 +11,7 @@ import { Button, Divider, Input } from '@nextui-org/react'
 import { ChatDialogModal } from '@/components/ChatDialog';
 import { useAuthStore } from '@/store/serviceStore'
 import LocationIcon from '@/components/icons/LocationIcon'
+import DetailedPostSkeleton from '@/components/DetailedPostSkeleton'
 
 
 const Page = () => {
@@ -51,6 +52,15 @@ const Page = () => {
         const date = new Date(time).toDateString()
         return date
     }
+
+    if (!post) {
+        return (
+            <MaxWidthWrapper>
+                <DetailedPostSkeleton />
+            </MaxWidthWrapper>
+        )
+    }
+
     return (
         <MaxWidthWrapper>
             <div className='flex flex-col gap-12'>
