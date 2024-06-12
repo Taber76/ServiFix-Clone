@@ -90,9 +90,9 @@ export interface Service {
 
 export interface Chat {
   chat_id: number;
-  user_id: number;
-  user_image: string;
-  username: string;
+  user_id: number;       // Other user
+  user_image: string;    // Other user
+  username: string;      // Other user
   service_id: number;
   service_image: string;
   service_title: string;

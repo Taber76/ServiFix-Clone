@@ -12,7 +12,8 @@ import { type Review } from '@/types/front.types'
 
 const EditReview = () => {
     const router = useRouter()
-    const reviewId = useParams()?.edit
+    const reviewId = useParams()?.reviewId
+    const serviceId = useParams()?.serviceId
     const { toast } = useToast()
     const [isLoading, setIsLoading] = useState(false)
     const [review, setReview] = useState<Review | null>(null)
@@ -23,11 +24,10 @@ const EditReview = () => {
 
     useEffect(() => {
         const getPost = async () => {
-            if (reviewId) {
+            if (reviewId !== '0') {
                 const { data } = await axios.get(`/api/review/getbyid?id=${reviewId}`)
                 if (!data) router.push('/not-found')
                 setReview(data)
-                console.log(data)
             }
         }
 
@@ -56,6 +56,7 @@ const EditReview = () => {
 
             const editedReview = {
                 id: review?.id,
+                service_id: Number(serviceId),
                 title: titleInput.value,
                 comment: commentInput.value,
                 rating: Number(ratingInput.value),
@@ -64,10 +65,10 @@ const EditReview = () => {
 
             let response: any
 
-            // New post
-            if (!review) response = await axios.post('/api/review/register', editedReview)
+            // New review
+            if (reviewId === '0') response = await axios.post('/api/review/register', editedReview)
 
-            // Edit post
+            // Edit review
             else response = await axios.put(`/api/review/update`, editedReview)
 
             if (response.status !== 200) throw new Error('Failed to update service.')
