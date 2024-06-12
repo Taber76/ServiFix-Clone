@@ -1,18 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @next/next/no-img-element */
 import {
     Dialog,
     DialogContent
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import io, { Socket } from 'socket.io-client';
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Dispatch, SetStateAction } from "react";
 import Cookies from 'js-cookie';
 import { useAuthStore } from '@/store/serviceStore'
+import { useToast } from "./ui/use-toast";
 
 export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
     { isOpen: boolean, setIsOpen: Dispatch<SetStateAction<boolean>>, recipientId: number, serviceId: number }) {
-
+    const { toast } = useToast()
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState<any[]>([]);
     const [chatInfo, setChatInfo] = useState<any>({});
@@ -45,20 +48,27 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
         };
 
         const socketInit = async () => {
-            await axios.get('/api/socket');
-            socketRef.current = io();
-            socketRef.current.emit('authenticate', Cookies.get('accessToken'));
-            socketRef.current.on('message', (msg, senderId) => {
-                if (senderId === recipientId)
-                    setMessages((prev) => [...prev, { message: msg, sender_id: recipientId }]);
-            });
+            try {
+                await axios.get('/api/socket');
+                socketRef.current = io();
+                socketRef.current.emit('authenticate', Cookies.get('accessToken'));
+                socketRef.current.on('message', (msg, senderId) => {
+                    if (senderId === recipientId)
+                        setMessages((prev) => [...prev, { message: msg, sender_id: recipientId }]);
+                });
+            } catch (error) {
+                toast({
+                    title: 'Error',
+                    description: 'Please login to continue',
+                    variant: 'destructive'
+                })
+            }
         };
 
         if (isOpen && userId) {
             fetchChatHistory()
             socketInit();
         }
-
         return () => {
             if (socketRef.current) {
                 socketRef.current.disconnect();
@@ -70,7 +80,12 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    const handleSendMessage = () => {
+    const input = document.getElementById('input') as HTMLInputElement;
+    const handleSendMessage = (e: FormEvent) => {
+        e.preventDefault();
+        if (!input?.value) return
+        input.focus();
+
         if (socketRef.current && message.trim()) {
             socketRef.current.emit('message', message, recipientId);
             setMessages((prev) => [...prev, { message, sender_id: 0 }]);
@@ -115,7 +130,7 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
                             <div key={index} className={`flex ${msg.sender_id == recipientId ? 'justify-start' : 'justify-end'}`}>
                                 <div className="flex items-end">
                                     <div className={`flex flex-col space-y-2 text-xs max-w-xs mx-2 ${msg.sender_id == recipientId ? 'items-start order-2' : 'items-end order-1'}`}>
-                                        <div><span className={`px-4 py-2 rounded-lg inline-block rounded-bl-none ${msg.sender_id == recipientId ? 'bg-gray-300 text-gray-600' : 'bg-blue-600 text-blue-100'}`}>{msg.message}</span></div>
+                                        <div><span className={`px-4 py-2 rounded-lg inline-block rounded-br-none ${msg.sender_id == recipientId ? 'bg-gray-300 text-gray-600' : 'bg-blue-600 text-blue-100'}`}>{msg.message}</span></div>
                                     </div>
                                     {msg.sender_id == recipientId && <img src={recipientId === chatInfo.user1_id ? chatInfo.user1_username : chatInfo.user2_username} alt="My profile" className="w-6 h-6 rounded-full order-1" />}
                                 </div>
@@ -127,20 +142,16 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
 
                     {/* Typing area */}
                     <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0" >
-                        <div className="relative flex">
-                            <input type="text" placeholder="Write your message!" className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"
+                        <form className="relative flex gap-2" onSubmit={(e) => { handleSendMessage(e) }}>
+                            <input id="input" type="text" autoComplete="off" autoCorrect="off" spellCheck="false" placeholder="Write your message!" className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"
                                 value={message} onChange={(e) => { setMessage(e.target.value) }} />
-                            <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
-                                <button type="button" className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
-                                    onClick={() => { handleSendMessage() }}
-                                >
-                                    <span className="font-bold">Send</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6 ml-2 transform rotate-90">
-                                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+                            <button type="submit" className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none">
+                                <span className="font-bold">Send</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 ml-2 transform rotate-90">
+                                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                                </svg>
+                            </button>
+                        </form>
                     </div>
 
                 </div>
