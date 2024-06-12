@@ -55,7 +55,7 @@ const EditPost = () => {
             if (descriptionInput) descriptionInput.value = post.description
             if (categoryInput) categoryInput.value = post.category
             if (cityInput) cityInput.value = post.city
-            if (priceInput) priceInput.value = post.price
+            if (priceInput) priceInput.value = post.price.toString()
             if (currencyInput) currencyInput.value = post.currency
         }
     }, [post, titleInput, descriptionInput, categoryInput, cityInput, priceInput, currencyInput])
@@ -72,7 +72,7 @@ const EditPost = () => {
                 id: post?.id,
                 title: titleInput.value,
                 description: descriptionInput.value,
-                hourly_price: priceInput.value,
+                hourly_price: Number(priceInput.value),
                 currency: currencyInput.value,
                 service_type_id,
                 city_id,

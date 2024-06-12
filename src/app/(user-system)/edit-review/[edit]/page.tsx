@@ -42,9 +42,9 @@ const EditReview = () => {
 
     useEffect(() => {
         if (review) {
-            if (titleInput) titleInput.value = review.title
+            if (titleInput && review.title) titleInput.value = review.title
             if (commentInput) commentInput.value = review.comment
-            if (ratingInput) ratingInput.value = review.rating as unknown as string
+            if (ratingInput) ratingInput.value = review.rating.toString()
         }
     }, [review, titleInput, commentInput, ratingInput])
 

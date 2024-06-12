@@ -28,6 +28,7 @@ export interface DetailedPost {
   id: number;
   postedBy: PostedBy;
   category: string;
+  service_type_id: number;
   title: string;
   description: string;
   url_image: string;
@@ -71,6 +72,7 @@ export interface Review {
   by: string;
   user_id: number;
   service_id: number;
+  service_title: string;
   createdAt: Date;
   updatedAt: Date;
   commentarie: string;
