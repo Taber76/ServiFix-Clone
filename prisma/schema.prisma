@@ -119,6 +119,10 @@ model Chat {
   user1_username String?
   user2_photo    String?
   user2_username String?
+  service_id     Int?     @default(0)
+  service_image  String?
+  service_title  String?
+  last_message   String?
 
   user1_id Int
   user1    User      @relation("chats_as_user1", fields: [user1_id], references: [id])

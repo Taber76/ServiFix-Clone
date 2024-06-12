@@ -87,3 +87,16 @@ export interface Service {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Chat {
+  id: number;
+  user_id: number;
+  user_image: string;
+  username: string;
+  service_id: number;
+  service_image: string;
+  service_title: string;
+  last_message: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
