@@ -116,7 +116,7 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
                                     <div className={`flex flex-col space-y-2 text-xs max-w-xs mx-2 ${msg.sender_id == recipientId ? 'items-start order-2' : 'items-end order-1'}`}>
                                         <div><span className={`px-4 py-2 rounded-lg inline-block rounded-bl-none ${msg.sender_id == recipientId ? 'bg-gray-300 text-gray-600' : 'bg-blue-600 text-blue-100'}`}>{msg.message}</span></div>
                                     </div>
-                                    {msg.sender_id == recipientId && <img src={recipientId === chatInfo.user1_id ? chatInfo.user1_username : chatInfo.user2_username} alt="My profile" className="w-6 h-6 rounded-full order-1" />}
+                                    {msg.sender_id == recipientId && <img src={recipientId === chatInfo.user1_id ? chatInfo.user1_photo : chatInfo.user2_photo} alt="My profile" className="w-6 h-6 rounded-full order-1" />}
                                 </div>
                             </div>
                         ))}
