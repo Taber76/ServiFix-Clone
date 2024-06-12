@@ -166,8 +166,11 @@ const Page = () => {
                             onChange={(e) => setRecipientId(e.target.value)}
                         /> */}
                         <div className='w-full flex items-center justify-center'>
-
-                            <Button onClick={() => setIsOpen(true)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150 flex-nowrap " >Chat <MessageSquareText /></Button>
+                            {userId == post?.postedBy.id ?
+                                <Button onClick={() => router.push(`/edit-post/${post?.id}`)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150" >Edit</Button>
+                                :
+                                <Button onClick={() => setIsOpen(true)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150 flex-nowrap " >Chat <MessageSquareText /></Button>
+                            }
                         </div>
                         <ChatDialogModal
                             isOpen={isOpen}
