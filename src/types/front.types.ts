@@ -89,7 +89,7 @@ export interface Service {
 }
 
 export interface Chat {
-  id: number;
+  chat_id: number;
   user_id: number;
   user_image: string;
   username: string;
