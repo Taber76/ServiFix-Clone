@@ -102,11 +102,10 @@ export default class ChatController {
         const chat = await ChatHelper.getChatByUserIds(user_id, recipient_id)
         chat_id = chat.id
       }
-      const algo = await prisma.chat.update({
+      await prisma.chat.update({
         where: { id: Number(chat_id) },
         data: { last_message: message }
       })
-      console.log(algo)
       const newMessage = await prisma.message.create({
         data: {
           chat_id: Number(chat_id),
@@ -130,6 +129,10 @@ export default class ChatController {
           sender_id: user1_id,
           message
         }
+      })
+      await prisma.chat.update({
+        where: { id: Number(chat.id) },
+        data: { last_message: message }
       })
       if (!newMessage) return false
       return true

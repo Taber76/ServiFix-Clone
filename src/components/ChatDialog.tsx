@@ -35,7 +35,6 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
                 const response = await axios.get(`/api/chat/getbyusers?user2_id=${recipientId}&service_id=${serviceId}`);
                 if (response.status !== 200) return;
                 const { chat, messages } = response.data;
-                console.log(chat, messages)
                 setMessages(messages);
                 setChatInfo(chat);
 
