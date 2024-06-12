@@ -51,7 +51,7 @@ const MyReviews = () => {
             reviews?.map((review, index) => {
               return (
                 <div key={review.id}
-                  onClick={() => router.push(`/edit-review/${review.id}`)}
+                  onClick={() => router.push(`/edit-review/${review.id}/0`)}
                 >
                   <div className='flex gap-2 py-4'>
                     <div className='size-12 shrink-0'>

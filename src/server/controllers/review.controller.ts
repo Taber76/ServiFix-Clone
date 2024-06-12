@@ -84,6 +84,8 @@ export default class ReviewController {
         rating: rating ? Number(rating) : undefined,
         comment: comment ? comment : undefined
       }
+      const checkReview = await ReviewHelper.checkReview(comment)
+      if (!checkReview) return res.status(403).json({ msg: 'You review conntains inappropriate content, or could not be reviewed.' })
       const review = await prisma.review.update({
         where: {
           id: Number(id),
