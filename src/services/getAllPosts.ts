@@ -6,7 +6,7 @@ const URL = process.env.NODE_ENV === 'production' ? `https://servi-fix-clone.ver
 
 export const getAllPosts = async () => {
     try {
-        const res = await fetch(URL);
+        const res = await fetch(`/api/service/getall`);
         if (!res.ok) throw new Error('Failed to fetch data');
         const data = await res.json();
         const posts: Post[] = data.map((post: Post) => {

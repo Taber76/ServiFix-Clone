@@ -7,7 +7,7 @@ export default class EmailTemplates {
     <p>Welcome to ServiceFix!</p>
     <p>To verify your account, click the link below:</p>
     <p>
-      <a href="${url}/api/auth/verify?id=${id}&key=${key}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: #007bff; text-align: center; text-decoration: none; border-radius: 5px;">
+      <a href="${`${process.env.DEPLOY_URL}api/servicetype/getall`}/api/auth/verify?id=${id}&key=${key}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: #007bff; text-align: center; text-decoration: none; border-radius: 5px;">
         Verify account
       </a>
     </p>

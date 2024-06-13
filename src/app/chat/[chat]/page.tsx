@@ -197,7 +197,7 @@ const Page = () => {
                                         <div>
                                             <div className='flex gap-2 items-center'>
                                                 <h3 className=' font-medium'>{review.by}</h3>
-                                                <h3 className=' font-light'>@{review.by.replaceAll(' ', '')}</h3>
+                                                <h3 className=' font-light'>@on {hourConvert(review.updatedAt as unknown as string)}</h3>
                                             </div>
                                             <p className='text-medium font-normal'>
                                                 {review.comment}
