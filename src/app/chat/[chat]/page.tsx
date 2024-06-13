@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { type DetailedPost } from '@/types/front.types'
 import { Button, Divider, Input } from '@nextui-org/react'
 import { ChatDialogModal } from '@/components/ChatDialog';
-import { useAuthStore } from '@/store/serviceStore'
+import { useAuthStore } from '@/store/authStore'
 import LocationIcon from '@/components/icons/LocationIcon'
 import RatingStars from '@/components/RatingStars'
 import DetailedPostSkeleton from '@/components/DetailedPostSkeleton'
@@ -22,7 +22,7 @@ const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [recipientId, setRecipientId] = useState<number | null>(null);
     const [userId, setUserId] = useState<number | null>(null);
-    const { user } = useAuthStore(state => ({ user: state.user }));
+    const { user } = useAuthStore();
 
     useEffect(() => {
         const isValidServiceId = async () => {

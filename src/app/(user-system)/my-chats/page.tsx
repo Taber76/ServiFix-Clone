@@ -1,6 +1,6 @@
 'use client'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import { useAuthStore } from '@/store/serviceStore'
+import { useAuthStore } from '@/store/authStore'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Button, Divider } from '@nextui-org/react'
@@ -16,7 +16,7 @@ const MyChats = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [recipientId, setRecipientId] = useState<number>(0);
   const [serviceId, setServiceId] = useState<number>(0);
-  const { user } = useAuthStore(state => ({ user: state.user }));
+  const { user } = useAuthStore();
 
 
   useEffect(() => {

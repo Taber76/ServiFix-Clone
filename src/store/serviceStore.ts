@@ -18,13 +18,6 @@ interface ServiceStore {
     setFilterConfig: (filterConfig: Partial<FilterConfig>) => void;
 }
 
-interface AuthState {
-    isAuthenticated: boolean;
-    user: any;
-    setAuthState: (authState: { isAuthenticated: boolean, user: any }) => void;
-    clearAuthState: () => void;
-}
-
 const initialFilterConfig: FilterConfig = {
     category: 'all',
     sort: 'all',
@@ -44,9 +37,3 @@ export const useStore = create<ServiceStore>((set) => ({
     }))
 }));
 
-export const useAuthStore = create<AuthState>((set) => ({
-    isAuthenticated: false,
-    user: { id: 82 }, // debe ser null <---------------------------------------------------------------
-    setAuthState: (authState) => set(authState),
-    clearAuthState: () => set({ isAuthenticated: false, user: null })
-}));
