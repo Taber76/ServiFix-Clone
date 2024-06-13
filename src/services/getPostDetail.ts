@@ -5,7 +5,7 @@ const URL = process.env.NODE_ENV === 'production' ? `https://servi-fix-clone.ver
 
 export const getAllServices = async (): Promise<Service[] | undefined> => {
     try {
-        const res = await fetch(URL);
+        const res = await fetch(`/api/servicetype/getall`);
         if (!res.ok) throw new Error('Failed to fetch data');
         const data: Service[] = await res.json();
         return data;

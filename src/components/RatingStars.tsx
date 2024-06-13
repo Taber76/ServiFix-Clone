@@ -1,7 +1,7 @@
 import { Star } from 'lucide-react'
 
 const RatingStars: React.FC<{ rating: number, size?: number }> = ({ rating, size = 18 }) => {
-    const filledStars = Math.floor(rating);
+    const filledStars = Math.round(rating);
     const emptyStars = 5 - filledStars;
 
 
