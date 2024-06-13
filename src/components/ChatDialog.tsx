@@ -10,7 +10,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Dispatch, SetStateAction } from "react";
 import Cookies from 'js-cookie';
-import { useAuthStore } from '@/store/serviceStore'
+import { useAuthStore } from '@/store/authStore'
 import { useToast } from "./ui/use-toast";
 
 export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
@@ -23,7 +23,7 @@ export function ChatDialogModal({ isOpen, setIsOpen, recipientId, serviceId }:
     const socketRef = useRef<Socket | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [userId, setUserId] = useState<number | null>(null);
-    const { user } = useAuthStore(state => ({ user: state.user }));
+    const { user } = useAuthStore();
 
     useEffect(() => {
         if (user) {

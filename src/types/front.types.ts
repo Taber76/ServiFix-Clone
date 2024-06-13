@@ -100,3 +100,15 @@ export interface Chat {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface User {
+  id: number;
+  name: string;
+  surname: string;
+  username: string;
+  email: string;
+  photo: string;
+  verified: boolean;
+  rating: number;
+  role: string;
+}

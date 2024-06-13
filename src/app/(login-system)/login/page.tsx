@@ -7,7 +7,7 @@ import axios from 'axios'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useState } from 'react'
-import { useAuthStore } from '@/store/serviceStore'
+import { useAuthStore } from '@/store/authStore'
 
 const Login = () => {
     const router = useRouter()
@@ -36,7 +36,7 @@ const Login = () => {
                     description: `${data.data.msg} ✅`,
                     variant: 'default'
                 })
-                setAuthState({ isAuthenticated: true, user: data.data.user })
+                setAuthState(data.data.user)
                 router.push('/services')
             }
 

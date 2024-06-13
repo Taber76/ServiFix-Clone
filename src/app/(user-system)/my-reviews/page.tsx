@@ -1,7 +1,7 @@
 'use client'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import RatingStars from '@/components/RatingStars'
-import { useAuthStore } from '@/store/serviceStore'
+import { useAuthStore } from '@/store/authStore'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Button, Divider, Input } from '@nextui-org/react'
@@ -13,7 +13,7 @@ const MyReviews = () => {
   const router = useRouter()
   const [reviews, setReviews] = useState<Review[]>([])
   const [userId, setUserId] = useState<number | null>(null);
-  const { user } = useAuthStore(state => ({ user: state.user }));
+  const { user } = useAuthStore();
 
 
   useEffect(() => {
