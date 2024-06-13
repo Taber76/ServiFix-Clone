@@ -87,7 +87,8 @@ export default class ServiceController {
       });
       if (!services || services.length === 0) return res.status(404).json({ msg: 'No services found' });
       const bestServicesByType = await Promise.all(services.map(async (service) => {
-        const { _max: { rating }, service_type_id } = service;
+        let { _max: { rating }, service_type_id } = service;
+        rating = Number(rating);
         const bestService = await prisma.service.findFirst({
           where: {
             service_type_id,
@@ -148,8 +149,11 @@ export default class ServiceController {
       const { title, description, hourly_price, currency, user_id, service_type_id, city_id, country_id } = req.body
       const serviceExist = await prisma.service.findFirst({ where: { user_id: Number(user_id), service_type_id: Number(service_type_id) } })
       if (serviceExist) return res.status(400).json({ msg: 'Service already exists.' })
+      const user = await prisma.user.findUnique({ where: { id: Number(user_id) } })
+      if (!user) return res.status(404).json({ msg: 'User not found' })
       const data = {
         title,
+        username: user.username,
         description,
         currency: currency ? currency : 'USD',
         hourly_price: hourly_price ? Number(hourly_price) : null,

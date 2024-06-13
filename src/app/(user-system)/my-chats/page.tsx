@@ -3,7 +3,7 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import { useAuthStore } from '@/store/serviceStore'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Button, Divider, Input } from '@nextui-org/react'
+import { Button, Divider } from '@nextui-org/react'
 import { type Chat } from '@/types/front.types'
 import { useRouter } from 'next/navigation'
 import { ChatDialogModal } from '@/components/ChatDialog';
@@ -15,34 +15,25 @@ const MyChats = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [recipientId, setRecipientId] = useState<number>(0);
   const [serviceId, setServiceId] = useState<number>(0);
-  const [userId, setUserId] = useState<number | null>(null);
   const { user } = useAuthStore(state => ({ user: state.user }));
 
 
   useEffect(() => {
     const getChats = async () => {
       if (user) {
-        setUserId(user.id)
         const getChats = await axios.get(`/api/chat/getall`)
         if (getChats.data) {
           setChats(getChats.data)
         }
-        console.log(getChats.data)
       }
     }
 
     getChats()
 
-  }, [user])
-
-  const hourConvert = (time: string) => {
-    const date = new Date(time).toDateString()
-    return date
-  }
+  }, [user, router])
 
 
   const handleChatClick = (chatId: number) => {
-    console.log(chatId)
     setIsOpen(true)
     const recipient = chats?.find((chat) => chat.chat_id === chatId)?.user_id ?? 0
     const service = chats?.find((chat) => chat.chat_id === chatId)?.service_id ?? 0
