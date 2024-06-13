@@ -11,6 +11,7 @@ import { Button, Divider, Input } from '@nextui-org/react'
 import { ChatDialogModal } from '@/components/ChatDialog';
 import { useAuthStore } from '@/store/serviceStore'
 import LocationIcon from '@/components/icons/LocationIcon'
+import RatingStars from '@/components/RatingStars'
 import DetailedPostSkeleton from '@/components/DetailedPostSkeleton'
 
 
@@ -39,7 +40,7 @@ const Page = () => {
         }
         isValidServiceId()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [router])
 
 
     useEffect(() => {
@@ -63,7 +64,9 @@ const Page = () => {
 
     return (
         <MaxWidthWrapper>
+
             <div className='flex flex-col gap-12'>
+
                 <section
                     className='flex flex-col min-h-[calc(100vh-9rem-1px)] lg:flex-row items-center lg:items-start justify-between gap-2'>
 
@@ -84,24 +87,7 @@ const Page = () => {
                                         }
                                     </div>
                                     <div className='flex'>
-                                        {
-                                            post?.postedBy.rating != null ? (post?.postedBy.rating > 0 && post?.postedBy.rating <= 5 && (
-                                                Array(5).fill(0).map((_, index) => (
-                                                    <Star
-                                                        key={index}
-                                                        size={16}
-                                                        fill={post.postedBy.rating && index < post?.postedBy.rating ? 'gold' : 'gray'}
-                                                        className="stroke-1 stroke-zinc-500" />
-                                                )
-                                                ))
-                                            ) : Array(5).fill(0).map((_, index) => (
-                                                <Star
-                                                    key={index}
-                                                    size={16}
-                                                    fill="gray"
-                                                    className="stroke-1 stroke-zinc-500" />)
-                                            )}
-
+                                        <RatingStars rating={post?.postedBy.rating} size={16} />
                                     </div>
                                 </div>
                                 <p className='lg:text-sm text-xs text-zinc-900 font-light text-nowrap self-end'>Posted: {hourConvert(post?.createdAt as unknown as string)}</p>
@@ -120,24 +106,7 @@ const Page = () => {
                                 <h1 className='text-4xl font-bold'>{post?.category}
                                 </h1>
                                 <div className='flex items-center text-lg'>
-                                    {
-                                        post?.stars != null ? (post?.stars > 0 && post?.stars <= 5 && (
-                                            Array(5).fill(0).map((_, index) => (
-                                                <Star
-                                                    key={index}
-                                                    size={24}
-                                                    fill={post?.stars && index < post?.stars ? 'gold' : 'gray'}
-                                                    className="stroke-1 stroke-zinc-500" />
-                                            )
-                                            ))
-                                        ) : Array(5).fill(0).map((_, index) => (
-                                            <Star
-                                                key={index}
-                                                size={24}
-                                                fill="gray"
-                                                className="stroke-1 stroke-zinc-500" />)
-                                        )}
-
+                                    <RatingStars rating={post?.stars} size={24} />
                                     {
                                         `${' '}(${post?.reviews.length})`
                                     }
@@ -146,16 +115,16 @@ const Page = () => {
                             <h1 className='text-xl flex gap-2 items-center'>{post?.city} <LocationIcon className={'stroke-2 stroke-green-800 size-5'} /></h1>
                             <h1 className='text-2xl font-bold'>{post?.title}</h1>
                             <div className='flex flex-col'>
-                                <p className=''>{post?.description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis est atque ratione velit ducimus vel magnam explicabo modi ipsa temiquam, quas sit tempore debitis cupiditate, eius suscipit qui deserunt. Lore corrupti odit porro nobis?</p>
+                                <p className=''>{post?.description}</p>
                             </div>
                             <div className='flex flex-col gap-2'>
-                                <h2 className='text-lg font-semibold'>Services price:</h2>
+                                <h2 className='text-lg font-semibold'>Service price:</h2>
                                 <div className='flex gap-2'>
                                     <div
                                         className='flex cursor-pointer gap-1 rounded-md items-center border w-min text-nowrap p-2 border-zinc-400 hover:border-zinc-600 '>
-                                        {post?.price} {post?.currency} Standar
+                                        {post?.price} {post?.currency}
                                     </div>
-                                    <div className='flex cursor-pointer gap-1 rounded-md items-center border w-min text-nowrap p-2 border-zinc-400 hover:border-zinc-600 '>{(Number(post?.price) * 1.77).toFixed(1)} {post?.currency} Premium</div>
+                                    {/*<div className='flex cursor-pointer gap-1 rounded-md items-center border w-min text-nowrap p-2 border-zinc-400 hover:border-zinc-600 '>{(Number(post?.price) * 1.77).toFixed(1)} {post?.currency} Premium</div>*/}
                                 </div>
                             </div>
                         </div>
@@ -198,25 +167,8 @@ const Page = () => {
 
                             <p className='text-sm font-light'>Member since: {post?.postedBy.createdAt ? new Date(post.createdAt).toLocaleDateString() : ''}</p>
                             <div className='flex items-center font-base'>
-                                {
-                                    post?.postedBy.rating != null ? (post?.postedBy.rating > 0 && post?.postedBy.rating <= 5 && (
-                                        Array(5).fill(0).map((_, index) => (
-                                            <Star
-                                                key={index}
-                                                size={24}
-                                                fill={post.postedBy.rating && index < post?.postedBy.rating ? 'gold' : 'gray'}
-                                                className="stroke-1 stroke-zinc-500" />
-                                        )
-                                        ))
-                                    ) : Array(5).fill(0).map((_, index) => (
-                                        <Star
-                                            key={index}
-                                            size={24}
-                                            fill="gray"
-                                            className="stroke-1 stroke-zinc-500" />)
-                                    )}
-
-                                <p className='ml-2'>5.0</p>
+                                <RatingStars rating={post?.postedBy.rating} size={24} />
+                                <p className='ml-2'>{post?.postedBy.rating.toFixed(1)}</p>
                             </div>
                         </div>
 
@@ -252,23 +204,7 @@ const Page = () => {
                                             </p>
                                             <div>
                                                 <div className='flex items-center font-base'>
-                                                    {
-                                                        review.rating != null ? (review.rating > 0 && review.rating <= 5 && (
-                                                            Array(5).fill(0).map((_, index) => (
-                                                                <Star
-                                                                    key={index}
-                                                                    size={24}
-                                                                    fill={review.rating && index < review.rating ? 'gold' : 'gray'}
-                                                                    className="stroke-1 stroke-zinc-500" />
-                                                            )
-                                                            ))
-                                                        ) : Array(5).fill(0).map((_, index) => (
-                                                            <Star
-                                                                key={index}
-                                                                size={24}
-                                                                fill="gray"
-                                                                className="stroke-1 stroke-zinc-500" />)
-                                                        )}
+                                                    <RatingStars rating={review.rating} size={24} />
                                                 </div>
                                             </div>
                                         </div>

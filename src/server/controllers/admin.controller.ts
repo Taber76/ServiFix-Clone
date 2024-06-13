@@ -8,6 +8,7 @@ export default class AdminController {
 
   static async calculateRating(req: NextApiRequest, res: NextApiResponse) {
     try {
+      // Calculate service rating
       const services = await prisma.service.findMany({ where: { active: true } })
       if (services.length === 0) return res.status(404).json({ msg: 'No services found.' })
       services.forEach(async (service) => {
@@ -18,6 +19,19 @@ export default class AdminController {
           data: { rating, num_reviews: reviews.length }
         })
       })
+
+      // Calculate user rating
+      const users = await prisma.user.findMany({ where: { active: true } })
+      if (users.length === 0) return res.status(404).json({ msg: 'No users found.' })
+      users.forEach(async (user) => {
+        const services = await prisma.service.findMany({ where: { user_id: user.id } })
+        const rating = services.reduce((acc, service) => acc + service.rating, 0) / services.length
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { rating }
+        })
+      })
+
       return res.status(200).json({ msg: 'Rating calculated.' })
     } catch (error) {
       return res.status(500).json({ error })
@@ -33,7 +47,8 @@ export default class AdminController {
       });
       if (!services || services.length === 0) return res.status(404).json({ msg: 'No services found' });
       const bestServicesByType = await Promise.all(services.map(async (service) => {
-        const { _max: { rating }, service_type_id } = service;
+        let { _max: { rating }, service_type_id } = service;
+        rating = Number(rating);
         const bestService = await prisma.service.findFirst({
           where: {
             service_type_id,

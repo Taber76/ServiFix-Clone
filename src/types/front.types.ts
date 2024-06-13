@@ -51,9 +51,9 @@ export interface PostedBy {
   email: string;
   photo: string;
   phone: null;
-  description: null;
-  personal_id: null;
-  rating: null;
+  description: string;
+  personal_id: number;
+  rating: number;
   role: string;
   key: null;
   password_reset_key: null;
@@ -76,7 +76,7 @@ export interface Review {
   createdAt: Date;
   updatedAt: Date;
   commentarie: string;
-  url_image: null;
+  url_image: string;
 }
 
 export interface Service {

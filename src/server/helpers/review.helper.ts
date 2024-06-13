@@ -30,13 +30,13 @@ export default class ReviewHelper {
       const reviewsWithUser = await Promise.all(reviews.map(async (review: any) => {
         const user = await prisma.user.findUnique({
           where: { id: review.user_id },
-          select: { username: true }
+          select: { username: true, photo: true }
         })
         return {
           ...review,
           by: user?.username,
           commentarie: review.comment,
-          url_image: null
+          url_image: user?.photo
         }
       }))
 

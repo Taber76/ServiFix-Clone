@@ -64,14 +64,14 @@ model ServiceType {
 
 model Service {
   id           Int      @id @default(autoincrement())
-  title        String?
-  username     String?
+  title        String
+  username     String
   description  String
   hourly_price Float?
   currency     String   @default("USD")
-  rating       Float?
-  num_reviews  Float?
-  times_hired  Float?
+  rating       Float    @default(0)
+  num_reviews  Float    @default(0)
+  times_hired  Float    @default(0)
   url_image    String?
   isVerified   Boolean  @default(false)
   shown        Boolean  @default(true)
