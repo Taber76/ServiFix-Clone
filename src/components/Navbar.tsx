@@ -7,8 +7,16 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, NavbarMe
 import { usePathname } from "next/navigation";
 import { DialogModal } from "./Dialog";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from '@/store/authStore'
+import { type User } from '@/types/front.types'
+interface UserAvatarProps {
+    user: User | null;
+}
 
-export function UserAvatar() {
+export function UserAvatar({ user }: UserAvatarProps) {
+    const router = useRouter()
+    const { clearAuthState } = useAuthStore()
+
     return (
         <div className="flex items-center gap-4">
             <Dropdown placement="bottom-end">
@@ -17,27 +25,31 @@ export function UserAvatar() {
                         isBordered
                         as="button"
                         className="transition-transform"
-                        src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                        src={user?.photo}
                     />
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Profile Actions" variant="flat">
                     <DropdownItem key="profile" className="h-14 gap-2">
                         <p className="font-semibold">Signed in as</p>
-                        <p className="font-semibold">zoey@example.com</p>
+                        <p className="font-semibold">{user?.name}</p>
                     </DropdownItem>
-                    <DropdownItem key="settings">
-                        My Settings
+                    <DropdownItem key="my-chats" onClick={() => router.push("/my-chats")}>
+                        Chats
                     </DropdownItem>
-                    <DropdownItem key="team_settings">Team Settings</DropdownItem>
-                    <DropdownItem key="analytics">
-                        Analytics
+                    <DropdownItem key="my-posts" onClick={() => router.push("/my-posts")}>
+                        My Posts
                     </DropdownItem>
-                    <DropdownItem key="system">System</DropdownItem>
-                    <DropdownItem key="configurations">Configurations</DropdownItem>
-                    <DropdownItem key="help_and_feedback">
-                        Help & Feedback
+                    <DropdownItem key="my-reviews" onClick={() => router.push("/my-reviews")}>
+                        My Reviews
                     </DropdownItem>
-                    <DropdownItem key="logout" color="danger">
+                    <DropdownItem
+                        key="logout"
+                        color="danger"
+                        onClick={() => {
+                            clearAuthState()
+                            router.push('/')
+                        }}
+                    >
                         Log Out
                     </DropdownItem>
                 </DropdownMenu>
@@ -47,30 +59,23 @@ export function UserAvatar() {
 }
 
 const Navbar = () => {
-    const isLoggedIn = false
+    //const isLoggedIn = false
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname()
-    const router = useRouter()
+    const { isLoggedIn, user, clearAuthState } = useAuthStore()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // const handleLoginClick = (e: any) => {
-    //     e.preventDefault()
-    //     isLoggedIn
-    //         ? setIsModalOpen(false)
-    //         : setIsModalOpen(true)
-
-    //     if (isLoggedIn) {
-    //         router.push('/services')
-    //     }
-    // }
 
     const menuItemsLogged = [
         "Profile",
+        "My-Posts",
+        "My-Reviews",
+        "Chats",
         "Services",
-        "Become a Tasker",
-        "Help & Feedback",
-        "Settings",
+        //"Become a Tasker",
+        //"Help & Feedback",
+        //"Settings",
         "Log Out",
     ];
     const menuItemsDefault = [
@@ -138,7 +143,7 @@ const Navbar = () => {
 
                             {
                                 isLoggedIn ? (
-                                    <UserAvatar />
+                                    <UserAvatar user={user} />
                                 ) : (
                                     <Link
                                         href='/signup'

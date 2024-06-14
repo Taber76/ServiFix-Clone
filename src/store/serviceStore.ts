@@ -1,6 +1,7 @@
 import { type Service } from '@/types/front.types';
 import { create } from 'zustand';
 
+
 interface FilterConfig {
     category: string;
     sort: string;
@@ -10,6 +11,7 @@ interface FilterConfig {
     priceRange: [number, number];
     user_id?: number;
 }
+
 
 interface ServiceStore {
     services: Service[] | [];
@@ -28,12 +30,14 @@ const initialFilterConfig: FilterConfig = {
     user_id: undefined
 };
 
+
+
 export const useStore = create<ServiceStore>((set) => ({
     services: [],
     setServices: (services: Service[]) => set({ services }),
     filterConfig: initialFilterConfig,
     setFilterConfig: (newConfig: Partial<FilterConfig>) => set(state => ({
         filterConfig: { ...state.filterConfig, ...newConfig }
-    }))
+    })),
 }));
 

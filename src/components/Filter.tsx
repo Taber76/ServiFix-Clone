@@ -40,10 +40,9 @@ const Filter: React.FC<FilterProps> = ({ user_id }) => {
 
     useEffect(() => {
         if (user_id) {
-            setFilterConfig({
-                ...filterConfig,
-                user_id: user_id,
-            });
+            setFilterConfig({ ...filterConfig, user_id: user_id });
+        } else {
+            setFilterConfig({ ...filterConfig, user_id: null });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user_id]);

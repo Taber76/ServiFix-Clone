@@ -10,15 +10,13 @@ import PostSkeleton from '@/components/PostSkeleton'
 const MyPosts = () => {
   const [userId, setUserId] = useState<number | null>(null);
   const { user } = useAuthStore();
-  console.log(user, 'user on my posts')
 
   useEffect(() => {
     if (user) {
       setUserId(user.id)
     }
-    console.log(user)
 
-  }, [])
+  }, [user])
 
   return (
     <main className='min-h-[calc(100vh-9rem-1px)] flex flex-col justify-center h-full py-12'>
