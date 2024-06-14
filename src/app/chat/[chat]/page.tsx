@@ -22,7 +22,7 @@ const Page = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [recipientId, setRecipientId] = useState<number | null>(null);
     const [userId, setUserId] = useState<number | null>(null);
-    const { user } = useAuthStore();
+    const { user, isLoggedIn } = useAuthStore();
 
     useEffect(() => {
         const isValidServiceId = async () => {
@@ -52,6 +52,14 @@ const Page = () => {
     function hourConvert(time: string) {
         const date = new Date(time).toDateString()
         return date
+    }
+
+    function handleChat() {
+        if (!isLoggedIn) {
+            router.push('/login')
+        } else {
+            setIsOpen(true)
+        }
     }
 
     if (!post) {
@@ -128,17 +136,13 @@ const Page = () => {
                                 </div>
                             </div>
                         </div>
-                        {/* <Input
-                            type="text"
-                            placeholder="Enter recipient ID"
-                            value={recipientId}
-                            onChange={(e) => setRecipientId(e.target.value)}
-                        /> */}
+
+                        {/* Chat Edit Button */}
                         <div className='w-full flex items-center justify-center'>
                             {userId == post?.postedBy.id ?
                                 <Button onClick={() => router.push(`/edit-post/${post?.id}`)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150" >Edit</Button>
                                 :
-                                <Button onClick={() => setIsOpen(true)} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150 flex-nowrap " >Chat <MessageSquareText /></Button>
+                                <Button onClick={() => handleChat()} className="w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-green-700 transition ease-in-out duration-150 flex-nowrap " >Chat <MessageSquareText /></Button>
                             }
                         </div>
                         <ChatDialogModal
