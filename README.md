@@ -31,6 +31,6 @@ https://servi-fix-clone.vercel.app/
 https://documenter.getpostman.com/view/24685479/2sA3Qnhtxc
 
 ## Integrantes
-**Frontend : Gabriel Castro**
-**Backend: Tabare Bermudez**
-**TL: Mayra Sierra**
+**Frontend : Gabriel Castro.**
+**Backend: Tabare Bermudez.**
+**TL: Mayra Sierra.**
