@@ -8,7 +8,7 @@ interface AuthState {
   clearAuthState: () => void;
 }
 
-
+/*
 const userInit: User = {
   id: 82,
   name: 'Admin',
@@ -20,10 +20,11 @@ const userInit: User = {
   rating: 3,
   role: 'admin',
 }
+  */
 
 export const useAuthStore = create<AuthState>()((set) => ({
-  isLoggedIn: true,
-  user: userInit,
+  isLoggedIn: false,
+  user: null,
   setAuthState: (user) => set({ isLoggedIn: true, user }),
   clearAuthState: () => set({ isLoggedIn: false, user: null }),
 }));

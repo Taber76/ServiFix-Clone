@@ -22,6 +22,9 @@ La plataforma tiene como objetivo conectar a los clientes que buscan servicios p
 	* Comunicación directa entre usuarios para concretar detalles del servicio.
 6. Notificaciones:
 	* Notificaciones por correo electrónico y en la plataforma sobre actualizaciones de servicios, mensajes nuevos, y más.
+### Test users
+- username: **admin**, password: **admin1234**
+- username: **Elba Surero**, password: **admin1234**
 
 
 ### DEPLOY
